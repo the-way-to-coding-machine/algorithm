@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public class RelativeRank506_JY {
+public class RelativeRank_JY {
     public String[] solution(int[] scores) {
         // input = [5, 4, 3, 2, 1] ==> [g, s, b, 4, 5],
         // input = [1, 4, 2, 5, 3] ==> [5, s, 4, g, b]
