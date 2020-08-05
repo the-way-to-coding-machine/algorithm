@@ -1,4 +1,4 @@
-package org.wtcm.leetcode;
+package org.wtcm.leetcode.q825;
 
 public class FriendsRequest_JY {
     public int solution(int[] people) { // 제약 조건을 잘 보자! 사람 수는 20,000명이고, 가능한 age는 120이다.

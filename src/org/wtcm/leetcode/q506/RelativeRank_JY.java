@@ -1,4 +1,4 @@
-package org.wtcm.leetcode;
+package org.wtcm.leetcode.q506;
 
 import java.util.ArrayList;
 import java.util.Arrays;
