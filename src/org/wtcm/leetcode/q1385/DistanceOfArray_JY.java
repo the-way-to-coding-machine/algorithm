@@ -1,4 +1,4 @@
-package org.wtcm.leetcode;
+package org.wtcm.leetcode.q1385;
 
 public class DistanceOfArray_JY {
     public int solution(int[] arr1, int[] arr2, int d) { // arr1의 원소 중 arr2의 모든 원소들과의 거리가 d 초과인 원소의 갯수
