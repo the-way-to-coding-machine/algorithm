@@ -1,30 +1,53 @@
 package org.wtcm.leetcode.q1146;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
 public class SnapshotArray_JY {
-    public ArrayList<Integer> arr;
-    public HashMap<Integer, List<Integer>> snapMap = new HashMap<>();
-    public int snapped;
+    public int[] arr;
+    public List<Snap> snaps = new ArrayList<>();
+    public Snap snap = new Snap();
+    public int id;
 
     public SnapshotArray_JY(int length) {
-        this.arr = new ArrayList<>(length);
+        arr = new int[length];
     }
 
     public void set(int index, int val) {
-        arr.set(index,val);
+        arr[index] = val;
+        snap.add(index, val);
     }
 
     public int snap() {
-        snapMap.put(snapped, arr);
-        return snapped++;
+        snaps.add(snap);
+        snap = new Snap(snap.map);
+        return id++;
     }
 
     public int get(int index, int snap_id) {
-        return snapMap.get(snap_id).get(index);
+        return snaps.get(snap_id).get(index);
+    }
+}
+
+class Snap {
+    public HashMap<Integer, Integer> map = new HashMap<>();
+
+    public Snap(HashMap<Integer, Integer> map) {
+        this.map = (HashMap<Integer, Integer>) map.clone();
+    }
+
+    public Snap(){}
+
+    public void add(int index, int value) {
+        map.put(index, value);
+    }
+
+    public int get(int index) {
+        if (!map.keySet().contains(index))
+            return 0;
+
+        return map.get(index);
     }
 }
 
