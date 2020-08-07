@@ -2,7 +2,7 @@ package org.wtcm.leetcode.q3;
 
 public class Runner {
     public static void main(String[] args) {
-        LongestSubstring question = new LongestSubstring();
+        LongestSubstring_JY question = new LongestSubstring_JY();
 //        String input = "abcabcbb";
 //        String input = "bbbbb";
 //        String input = "pwwkew";

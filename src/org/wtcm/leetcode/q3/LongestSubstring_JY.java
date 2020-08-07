@@ -2,7 +2,7 @@ package org.wtcm.leetcode.q3;
 
 import java.util.HashMap;
 
-public class LongestSubstring {
+public class LongestSubstring_JY {
     public int lengthOfLongestSubstring(String s) {
         char[] string = s.toCharArray();
         HashMap<Character, Boolean> visited;

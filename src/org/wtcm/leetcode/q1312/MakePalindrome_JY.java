@@ -1,6 +1,6 @@
 package org.wtcm.leetcode.q1312;
 
-public class MakePalindrome {
+public class MakePalindrome_JY {
     //    // mbadm
 //    // leetcode
 //    /* note. it doesn't need to make real palindrome.
