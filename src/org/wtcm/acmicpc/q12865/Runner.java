@@ -6,7 +6,7 @@ public class Runner {
 
         int items = 4;
         int limit = 7;
-        int[] weight = {6, 4, 3, 5}, values = {13, 8, 6, 12};
+        int[] weight = {6, 4, 3, 5,0}, values = {13, 8, 6, 12,0};
 
         System.out.println(question.solution(items, limit, weight, values));
     }

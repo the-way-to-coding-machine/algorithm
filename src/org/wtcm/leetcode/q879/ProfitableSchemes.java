@@ -19,27 +19,36 @@ public class ProfitableSchemes {
     /*
             note. 딱 내가 잘 못하는 전형적인 dp 유형이다...
     * */
-    public int profitableSchemes(int budget, int P, int[] costs, int[] profits) {
-        int modulo = 1_000_000_007;
-        int totalWork = costs.length, res = 0;
-        int[][][] result = new int[totalWork+1][budget+1][P+1]; // [team번호][참여인원][얻은 수익..?]
+    int total, G, P, cnt;
+    int[] groups, profits;
 
-        result[0][0][0] = 1; // 1번부터 시작한다.
-        //result[workNum][money][earn]
-        for (int workNum = 1; workNum <= totalWork; workNum++) {
-            int cost = costs[workNum-1], profit = profits[workNum-1]; // i번째 팀이 i번째 번째 수익을 얻을 때.
-            for (int money = 0; money <= budget; money++) {
-                for (int earn = 0; earn <= P; earn++) {
-                    result[workNum][money][earn] = result[workNum-1][money][earn];
-                    if (money >= cost) { // j가 g보다 큰 경우가 어떤 경우지..
-                        result[workNum][money][earn] = (result[workNum][money][earn] + result[workNum-1][money-cost][Math.max(0,earn-profit)]) % modulo;
-                    }
-                }
-            }
+    public int main(int G, int P, int[] group, int[] profit) {
+        total = group.length;
+        groups = group;
+        profits = profit;
+        this.P = P;
+        this.G = G;
+
+        recur(0, G, P);
+
+        return cnt;
+    }
+
+    public void recur(int index, int remainedGang, int necessaryProfit) {
+        if (index >= total) {
+            if (necessaryProfit <= 0 && remainedGang >= 0)
+                ++cnt;
+            return;
         }
-        for (int i = 0; i <= budget; i++) {
-            res = (res+result[totalWork][i][P]) % modulo;
+
+        if (remainedGang < 0)
+            return;
+
+        // pick
+        if (remainedGang > groups[index]) {
+            recur(index + 1, remainedGang - groups[index], necessaryProfit - profits[index]);
         }
-        return res;
+        recur(index + 1, remainedGang, necessaryProfit);
+
     }
 }

@@ -10,6 +10,7 @@ public class Runner {
         int G=10, P=5;
         int[] group = {2,3,5}, profit={6,7,8};
 
-        System.out.println(question.profitableSchemes(G,P,group,profit));
+//        System.out.println(question.profitableSchemes(G,P,group,profit));
+        System.out.println(question.main(G,P,group,profit));
     }
 }

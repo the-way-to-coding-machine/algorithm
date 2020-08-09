@@ -9,6 +9,7 @@ public class Runner {
 //        String input = "aaa";
 
 //        question.distinctSubseqII(input);
-        System.out.println(question.distinctSubseqII(input));
+//        System.out.println(question.distinctSubseqII(input));
+        System.out.println(question.aaa(input));
     }
 }
