@@ -2,7 +2,7 @@ package org.wtcm.leetcode.q879;
 
 import java.util.Arrays;
 
-public class ProfitableSchemes {
+public class ProfitableSchemes_JY {
     /*
             G = 5, P = 3
             group = [2, 2]
@@ -28,19 +28,15 @@ public class ProfitableSchemes {
         this.P = P;
         this.G = G;
 
-//        bruteForce(0, G, P);
+        bruteForce(0, G, P);
 
-        cache = new int[total][G+1][P+1];
-        for (int i = 0; i < total; i++) {
-            for (int j = 0; j <= G; j++) {
-                for (int k = 0; k <= P; k++) {
-                    cache[i][j][k] = -1;
-                }
-
-            }
-        }
-
-        return caching(0, G, P);
+//        cache = new int[total][G + 1][P + 1];
+//        for (int i = 0; i < total; i++)
+//            for (int j = 0; j <= G; j++)
+//                for (int k = 0; k <= P; k++)
+//                    cache[i][j][k] = -1;
+        return cnt;
+//        return caching(0, G, P);
     }
 
     /*  note.
@@ -72,22 +68,35 @@ public class ProfitableSchemes {
             cache[index][availableMember][necessaryProfit] 에 해당 값을 저장해놓는다.
     * */
     public int caching(int index, int remainedGang, int necessaryProfit) {
-        if (index >= total) // 끝까지 온 경우 --> 처음 겪는 경우.
-            return (remainedGang >= 0 && necessaryProfit <= 0) ? 1 : 0;
+        if (index >= total) // 모든 crime을 다 탐색하고, 끝났을 때. --> 결과 판정
+            return (remainedGang >= 0 && necessaryProfit <= 0) ? 1 : 0; // 조건 만족하면 cnt를 1올리고 아니면 0. (이건 return 받아서 더한다.)
 
-        if (cache[index][remainedGang][necessaryProfit] != -1) // 여기에 저장된 값이 있으면 recursive 더 타지 말고 return 해줘라
-            return cache[index][remainedGang][necessaryProfit];
+        /* note.
+            cache 배열을 -1로 초기화 하지 않고 0으로 두고, 아래의 조건도 '!= 0' 으로 두면
+            안되는 경우도 한번 더 탐색하게 된다. cache를 하는 이유는 '되는 경우만' 저장 해놓을 의도가 아니다.
+            되던 안되던 한번 탐색 했던 경우는 모두 저장 해놓을 의도이다.
+         */
+//        else if (cache[index][remainedGang][necessaryProfit] != -1)
+//            return cache[index][remainedGang][necessaryProfit];
 
-        if (remainedGang <= 0) // 이미 남은 인원이 없다면 이번 경우는 x
-            return 0;
+        else if (remainedGang <= 0) // 이미 남은 인원이 없다면 이번 경우는 x
+            return cache[index][remainedGang][necessaryProfit] > -1 ? cache[index][remainedGang][necessaryProfit] : 0;
 
+        /* note.
+            dp는 각 subset에 해당하는 문제의 union이 전체 문제의 답이 될 때 쓰는 알고리즘이다.
+            고로 caching 함수가 호출될 때 마다 해당 함수(문제)의 답이 될 cnt값을 새로 선언한다.
+         */
         int cnt = 0;
 
-        if (remainedGang >= groups[index]) {
-            cnt += caching(index+1, remainedGang - groups[index], Math.max(0,necessaryProfit-profits[index]));
-        }
+        // note.  i 번째 까지가 아니라 '부터'로 생각해야할듯.
 
-        cnt += caching(index+1, remainedGang, necessaryProfit);
+
+        // commit crime if capable
+        if (remainedGang >= groups[index])
+            cnt += caching(index + 1, remainedGang - groups[index], Math.max(0, necessaryProfit - profits[index]));
+
+        // don't commit crime due to lack of person
+        cnt += caching(index + 1, remainedGang, necessaryProfit);
 
         cache[index][remainedGang][necessaryProfit] = cnt;
 
