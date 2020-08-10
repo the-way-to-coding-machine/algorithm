@@ -1,6 +1,7 @@
 package org.wtcm.leetcode.q879;
 
 import java.util.Arrays;
+import java.util.Map;
 
 public class ProfitableSchemes_JY {
     /*
@@ -12,13 +13,10 @@ public class ProfitableSchemes_JY {
             한번 crime에 참여한 사람은 다른 crime에 참여할 수 없다.
 
             이때 적어도 P를 벌기 위한 실행할 수 있는 crime scheme을 모두 찾아라.
-
-
-            profit[i]를 하기 위한 cost == group[i]
-            dp
     * */
     int total, G, P, cnt;
     int[] groups, profits;
+
     int[][][] cache;
 
     public int main(int G, int P, int[] group, int[] profit) {
@@ -28,15 +26,15 @@ public class ProfitableSchemes_JY {
         this.P = P;
         this.G = G;
 
-        bruteForce(0, G, P);
+//        bruteForce(0, G, P);
 
-//        cache = new int[total][G + 1][P + 1];
-//        for (int i = 0; i < total; i++)
-//            for (int j = 0; j <= G; j++)
-//                for (int k = 0; k <= P; k++)
-//                    cache[i][j][k] = -1;
-        return cnt;
-//        return caching(0, G, P);
+        cache = new int[total][G + 1][P + 1];
+        for (int i = 0; i < total; i++)
+            for (int j = 0; j <= G; j++)
+                for (int k = 0; k <= P; k++)
+                    cache[i][j][k] = -1;
+//        return cnt;
+        return caching(0, G, P);
     }
 
     /*  note.
@@ -68,38 +66,47 @@ public class ProfitableSchemes_JY {
             cache[index][availableMember][necessaryProfit] 에 해당 값을 저장해놓는다.
     * */
     public int caching(int index, int remainedGang, int necessaryProfit) {
-        if (index >= total) // 모든 crime을 다 탐색하고, 끝났을 때. --> 결과 판정
-            return (remainedGang >= 0 && necessaryProfit <= 0) ? 1 : 0; // 조건 만족하면 cnt를 1올리고 아니면 0. (이건 return 받아서 더한다.)
+        if (index >= total || remainedGang <= 0) {
+            if (remainedGang >= 0 && necessaryProfit <= 0)
+                return 1;
+            return 0;
+        }
 
-        /* note.
-            cache 배열을 -1로 초기화 하지 않고 0으로 두고, 아래의 조건도 '!= 0' 으로 두면
-            안되는 경우도 한번 더 탐색하게 된다. cache를 하는 이유는 '되는 경우만' 저장 해놓을 의도가 아니다.
-            되던 안되던 한번 탐색 했던 경우는 모두 저장 해놓을 의도이다.
-         */
-//        else if (cache[index][remainedGang][necessaryProfit] != -1)
-//            return cache[index][remainedGang][necessaryProfit];
+        if (cache[index][remainedGang][necessaryProfit] != -1)
+            return cache[index][remainedGang][necessaryProfit];
 
-        else if (remainedGang <= 0) // 이미 남은 인원이 없다면 이번 경우는 x
-            return cache[index][remainedGang][necessaryProfit] > -1 ? cache[index][remainedGang][necessaryProfit] : 0;
-
-        /* note.
-            dp는 각 subset에 해당하는 문제의 union이 전체 문제의 답이 될 때 쓰는 알고리즘이다.
-            고로 caching 함수가 호출될 때 마다 해당 함수(문제)의 답이 될 cnt값을 새로 선언한다.
-         */
-        int cnt = 0;
-
-        // note.  i 번째 까지가 아니라 '부터'로 생각해야할듯.
-
-
-        // commit crime if capable
+        // 여기서부터는 실제 동작임.
+        int commit=0, nocommit=0;
         if (remainedGang >= groups[index])
-            cnt += caching(index + 1, remainedGang - groups[index], Math.max(0, necessaryProfit - profits[index]));
+            commit = caching(index + 1, remainedGang - groups[index], Math.max(0,necessaryProfit - profits[index]));
 
-        // don't commit crime due to lack of person
-        cnt += caching(index + 1, remainedGang, necessaryProfit);
+        nocommit = caching(index + 1, remainedGang, necessaryProfit);
+        return cache[index][remainedGang][necessaryProfit] = commit + nocommit;
+    }
 
-        cache[index][remainedGang][necessaryProfit] = cnt;
+    public int profitableSchemes(int G, int P, int[] group, int[] profit) {
+        int N = group.length;
+        int M = 1_000_000_007;
 
-        return cnt;
+        int dp[][][] = new int[N + 1][G + 1][P + 1]; // n번째일부터 탐색했을때 g명으로 p를 구하는 경우의 수..?
+
+        dp[0][0][0] = 1;
+        for (int i = 1; i <= N; i++) {
+            int p = profit[i - 1];
+            int g = group[i - 1];
+            for (int j = 0; j <= G; j++) {  // 사람 0명일 때부터 G(최댓값)명일때까지...
+                for (int k = 0; k <= P; k++) {  // k원을 버는 경우야.. 남은경우야..?
+                    dp[i][j][k] = dp[i - 1][j][k];
+                    if (j >= g) {
+                        dp[i][j][k] += dp[i - 1][j - g][Math.max(0, k - p)] % M;
+                    }
+                }
+            }
+        }
+        int res = 0;
+        for (int i = 0; i <= G; i++)
+            res += dp[N][i][P] % M;
+
+        return res;
     }
 }
