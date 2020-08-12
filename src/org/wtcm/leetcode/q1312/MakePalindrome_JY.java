@@ -25,8 +25,13 @@ public class MakePalindrome_JY {
 //        cnt *=2;
 //        return s.endsWith("A") ? cnt-1 : cnt;
 //    }
-    Integer[][] memo;
 
+    /*  note.
+            strategy : remove a character from the beginning.
+                       then check the rest is palindrome.
+
+    * */
+    Integer[][] memo;
     public int minInsertions(String s) {
         memo = new Integer[s.length()][s.length()];
         char[] arr = s.toCharArray();
@@ -55,8 +60,8 @@ public class MakePalindrome_JY {
         int[] curr = new int[n];
         int[] pre = new int[n];
 
-        for (int i = n - 1; i >= 0; i--) {
-            for (int j = i; j < n; j++) {
+        for (int i = n - 1; i >= 0; i--) { // string의 끝글자부터 첫글자까지.
+            for (int j = i; j < n; j++) {  // i번째 글자부터 오른쪽으로 진행
                 if (i == j) {
                     curr[j] = 0;
                     continue;
@@ -70,5 +75,40 @@ public class MakePalindrome_JY {
             curr = t;
         }
         return pre[n - 1];
+    }
+
+    int[][] cache;
+    public int my(String s) {
+        char[] string = s.toCharArray();
+        int start = 0, end = s.length()-1;
+
+        cache = new int[end+1][end+1];
+        for (int i = 0; i <= end; i++)
+            for (int j = 0; j <= end ; j++)
+                cache[i][j] = -1;
+
+        return cacheRemove(string, start, end);
+    }
+
+    public int remove(char[] string, int start, int end) {
+        if (start >= end) return 0;
+        if (string[start] == string[end])
+            return remove(string, start+1, end-1);
+
+        return Math.min(remove(string, start+1, end), remove(string, start, end-1))+1;
+    }
+
+    public int cacheRemove(char[] string, int start, int end) {
+        if (start >= end) return 0;
+
+        if (cache[start][end] != -1)
+            return cache[start][end];
+
+        if (string[start] == string[end])
+            cache[start][end] = cacheRemove(string, start+1, end-1);
+        else
+            cache[start][end] = Math.min(cacheRemove(string, start+1, end), cacheRemove(string, start, end-1))+1;
+
+        return cache[start][end];
     }
 }

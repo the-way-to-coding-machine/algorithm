@@ -6,9 +6,10 @@ public class Runner {
 //        String input = "mbadm";
 //        String input = "zzazz";
 //        String input = "nom";
-//        String input = "leetcode";
-        String input = "zjveiiwvc";
+        String input = "leetcode";
+//        String input = "zjveiiwvc";
 
-        System.out.println(question.minInsertions(input));
+//        System.out.println(question.minInsertions1(input));
+        System.out.println(question.my(input));
     }
 }
