@@ -5,11 +5,12 @@ public class Runner {
         DistinctSubsequences2_JY question = new DistinctSubsequences2_JY();
 
 //        String input = "abc";
-        String input = "aba";
-//        String input = "aaa";
+//        String input = "aba";
+        String input = "aaa";
+//        String input = "pcrdhwdxmqdznbenhwjsenjhvulyve";
 
 //        question.distinctSubseqII(input);
 //        System.out.println(question.distinctSubseqII(input));
-        System.out.println(question.aaa(input));
+        System.out.println(question.main(input));
     }
 }
