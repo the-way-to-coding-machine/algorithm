@@ -1,4 +1,4 @@
-package org.wtcm.kakao2019;
+package org.wtcm.kakao2019.failurerate;
 
 import java.util.Arrays;
 
