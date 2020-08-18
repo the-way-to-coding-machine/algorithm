@@ -1,4 +1,4 @@
-package org.wtcm.kakao2020;
+package org.wtcm.kakao2020.stringcompress;
 
 public class StringCompression_JY {
     /* note.
