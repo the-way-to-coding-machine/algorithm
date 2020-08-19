@@ -6,11 +6,11 @@ public class Runner {
 
 //        String input = "abc";
 //        String input = "aba";
-        String input = "aaa";
-//        String input = "pcrdhwdxmqdznbenhwjsenjhvulyve";
+//        String input = "aaa";
+        String input = "pcrdhwdxmqdznbenhwjsenjhvulyve";
 
 //        question.distinctSubseqII(input);
 //        System.out.println(question.distinctSubseqII(input));
-        System.out.println(question.main(input));
+        System.out.println(question.distinctSubseqII(input));
     }
 }
