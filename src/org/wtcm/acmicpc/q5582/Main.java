@@ -14,16 +14,16 @@ public class Main {
 
         String str1 = br.readLine();
         String str2 = br.readLine();
-        int[][] dp = new int[str1.length() + 1][str2.length() + 1];
-        int ans = 0;
-
-        for (int idx1 = 1; idx1 <= str1.length(); idx1++)
-            for (int idx2 = 1; idx2 <= str2.length(); idx2++)
+        int[][] dp = new int[str1.length()+1][str2.length()+1];
+        int max = 0;
+        for (int idx1 = 1; idx1 <= str1.length() ; idx1++) {
+            for (int idx2 = 1; idx2 <= str2.length() ; idx2++) {
                 if (str1.charAt(idx1-1) == str2.charAt(idx2-1)) {
-                    dp[idx1][idx2] = dp[idx1 - 1][idx2 - 1] + 1;
-                    ans = Math.max(ans, dp[idx1][idx2]);
-                } // todo 여기서 else의 역할 알아보기
-
-        System.out.println(ans);
+                    dp[idx1][idx2] = dp[idx1-1][idx2-1]+1;
+                    max = Math.max(dp[idx1][idx2], max);
+                }
+            }
+        }
+        System.out.println(max);
     }
 }
