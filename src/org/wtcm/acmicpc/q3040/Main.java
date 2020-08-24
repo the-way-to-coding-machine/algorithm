@@ -1,0 +1,42 @@
+package org.wtcm.acmicpc.q3040;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.stream.IntStream;
+
+public class Main {
+
+    public static void main(String[] args) throws IOException {
+       BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+        int[] nums = new int[9];
+        int ex = 0;
+        for (int i = 0; i < 9; i++) {
+            nums[i] = Integer.parseInt(br.readLine());
+            ex += nums[i];
+        }
+        ex -= 100;
+
+        for (int i = 0; i < 8; i++) {
+            for (int j = i+1; j < 9; j++) {
+                if (nums[i]+nums[j] == ex) {
+                    final int ii = i;
+                    final int jj = j;
+                    IntStream.of(nums).filter(num -> num != nums[ii] && num != nums[jj]).forEach(System.out::println);
+                }
+            }
+        }
+    }
+}
+/*
+7
+8
+10
+13
+15
+19
+20
+23
+25
+* */
