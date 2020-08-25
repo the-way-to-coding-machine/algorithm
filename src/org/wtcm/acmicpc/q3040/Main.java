@@ -21,9 +21,9 @@ public class Main {
         for (int i = 0; i < 8; i++) {
             for (int j = i+1; j < 9; j++) {
                 if (nums[i]+nums[j] == ex) {
-                    final int ii = i;
-                    final int jj = j;
-                    IntStream.of(nums).filter(num -> num != nums[ii] && num != nums[jj]).forEach(System.out::println);
+                    final int fake1 = nums[i];
+                    final int fake2 = nums[j];
+                    IntStream.of(nums).filter(num -> num != fake1 && num != fake2).forEach(System.out::println);
                 }
             }
         }
