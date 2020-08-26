@@ -27,8 +27,8 @@ public class Main {
             int M = reduceM(m[i]);
             int startPoint = reducePos(k[i], M);
             int cycleLength = posList.size() - startPoint;
-            int dest = (k[i] - startPoint) % (cycleLength) == 0 ? cycleLength : (k[i] - startPoint) % (cycleLength);
-            System.out.println(posList.get(dest-1));
+            int dest = (k[i] - startPoint) % cycleLength == 0 ? cycleLength : (k[i] - startPoint) % cycleLength;
+            System.out.println(posList.get(dest+startPoint-1));
             distanceList.clear();
             posList.clear();
         }
@@ -45,7 +45,7 @@ public class Main {
         Position pos = new Position(0, 0);
         int idx=0;
         for (int cnt = 0; cnt < k; cnt++) {
-            if (cnt >= distanceList.size()) idx = distanceList.size()-1;
+            if (m % 3 == 0 && cnt >= distanceList.size()) idx = distanceList.size()-1;
             else idx = cnt % distanceList.size();
             pos = pos.move(cnt, distanceList.get(idx));
             if ((startPoint = posList.indexOf(pos)) != -1) {
@@ -83,8 +83,6 @@ public class Main {
         }
         return result;
     }
-
-
 }
 
 class Position {
