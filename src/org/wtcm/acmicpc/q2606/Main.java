@@ -1,16 +1,18 @@
-package org.wtcm.acmicpc;
+package org.wtcm.acmicpc.q2606;
 
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
-public class Virus2606_JY {
-    int[] parent;
+public class Main {
+    static int[] parent;
 
-    public int solution() {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int answer = 0;
-        Scanner sc = new Scanner(System.in);
 
-        int computers = sc.nextInt();
-        int edges = sc.nextInt();
+        int computers = Integer.parseInt(br.readLine());
+        int edges = Integer.parseInt(br.readLine());
         parent = new int[computers+1];
 
         for (int i = 1; i <= computers; i++) {
@@ -18,24 +20,24 @@ public class Virus2606_JY {
         }
 
         for (int idx = 0; idx < edges; idx++) {
-            String[] edge = sc.nextLine().split(" ");
+            String[] edge = br.readLine().split(" ");
             union(Integer.parseInt(edge[0]), Integer.parseInt(edge[1]));
         }
 
         for (int com = 2; com <= computers; com++) {
             if (parent[com] == parent[1])   answer++;
         }
-        return answer;
+        System.out.println(answer);
     }
 
-    int findRoot(int computer) {
+    static int findRoot(int computer) {
         if (parent[computer] == computer)
             return computer;
 
         return findRoot(parent[computer]);
     }
 
-    void union(int c1, int c2) {
+    static void union(int c1, int c2) {
         int c1Root = findRoot(c1);
         int c2Root = findRoot(c2);
 
