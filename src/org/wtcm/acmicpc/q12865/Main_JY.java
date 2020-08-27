@@ -64,7 +64,7 @@ public class Main_JY {
 
         int[] dp = new int[K+1];
         for (int i = 1; i <= N; i++) {// n번째 물건까지 탐색했을 때, k만큼의 무게 여유가 있을때의 최대 value.
-            for (int j = K; j >= 1; j--)
+            for (int j = K; j >= 1; j--) // note. 왜 역순으로 해야하는가..?? --> https://plzrun.tistory.com/entry/Knapsack-DP-%EA%B8%B0%EB%B3%B8%ED%8E%B81
                 if (j - weights[i] >= 0) // k는 '무게'의 limit이니깐 i번째 아이템의 '무게'가 limit보다 커서는 안된다.
                     dp[j] = Math.max(dp[j], dp[j-weights[i]] + values[i]);
         }
