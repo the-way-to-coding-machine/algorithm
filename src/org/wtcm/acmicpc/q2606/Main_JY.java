@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class Main_JY {
-    static int[] parent;
+    public static int[] parent;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -25,7 +25,7 @@ public class Main_JY {
         }
 
         for (int com = 2; com <= computers; com++) {
-            if (parent[com] == parent[1])   answer++;
+            if (findRoot(com) == findRoot(1))   answer++;
         }
         System.out.println(answer);
     }
@@ -41,6 +41,9 @@ public class Main_JY {
         int c1Root = findRoot(c1);
         int c2Root = findRoot(c2);
 
-        parent[c2Root] = c1Root;
+        if (c1Root > c2Root)
+            parent[c1Root] = c2Root;
+        else
+            parent[c2Root] = c1Root;
     }
 }
