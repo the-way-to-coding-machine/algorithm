@@ -3,8 +3,11 @@
 
 #### Submission Rule : 
  - the submitting class name must be ```Main```, the code must include necessary ```import```,   
-   and the ```Main``` class's must have ```public static void main``` method.   
+   and the ```Main``` class must have ```public static void main``` method.   
  - the code must include input and output methods.
+ - be careful your code has correct class name when copy & paste   
+   at the website's submission page. (REMOVE YOUR NAME FROM THE CLASS NAME!!)
+ 
    
 ---------
 ### Problems
