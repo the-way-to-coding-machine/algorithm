@@ -6,9 +6,11 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Main {
+public class Main_JT {
     static List<Integer> distanceList = new ArrayList<>();
     static List<Position> posList = new ArrayList<>();
+    static int[] xPos = {0, 1, 0, -1};
+    static int[] yPos = {1, 0, -1, 0};
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -27,31 +29,57 @@ public class Main {
             int M = reduceM(m[i]);
             int startPoint = reducePos(k[i], M);
             int cycleLength = posList.size() - startPoint;
-            int dest = (k[i] - startPoint) % cycleLength == 0 ? cycleLength : (k[i] - startPoint) % cycleLength;
-            System.out.println(posList.get(dest+startPoint-1));
+            int dest = (k[i] - startPoint) % cycleLength;
+            System.out.println(posList.get(dest + startPoint));
             distanceList.clear();
             posList.clear();
         }
     }
 
     static int reduceM(int m) {
-        return m % 9 == 0 ? 9 : m % 9;
+        return m+1 % 9 == 0 ? 9 : m % 9;
     }
 
     static int reducePos(int k, int m) {
         int startPoint = 0;
 
         makeDigList(m);
+        posList.add(new Position(0, 0));
         Position pos = new Position(0, 0);
-        int idx=0;
-        for (int cnt = 0; cnt < k; cnt++) {
-            if (m % 3 == 0 && cnt >= distanceList.size()) idx = distanceList.size()-1;
-            else idx = cnt % distanceList.size();
-            pos = pos.move(cnt, distanceList.get(idx));
-            if ((startPoint = posList.indexOf(pos)) != -1) {
-                break;
+        int idx = 0;
+        int direction = 0;
+        int distance = 0;
+        int size = distanceList.size();
+
+        if (m % 3 != 0) {
+            for (int cnt = 0; cnt < k; cnt++) {
+                idx = cnt % size;
+                direction = cnt % 4;
+                distance = distanceList.get(idx);
+
+                pos.x += xPos[direction] * distance;
+                pos.y += yPos[direction] * distance;
+
+                if ((startPoint = posList.indexOf(pos)) != -1) {
+                    break;
+                }
+                posList.add(new Position(pos.x, pos.y));
             }
-            posList.add(new Position(pos.x, pos.y));
+        } else {
+            for (int cnt = 0; cnt < k; cnt++) {
+                if (cnt >= size) idx = size - 1;
+                else idx = cnt % size;
+                direction = cnt % 4;
+                distance = distanceList.get(idx);
+
+                pos.x += xPos[direction] * distance;
+                pos.y += yPos[direction] * distance;
+
+                if ((startPoint = posList.indexOf(pos)) != -1) {
+                    break;
+                }
+                posList.add(new Position(pos.x, pos.y));
+            }
         }
         return Math.max(startPoint, 0);
     }
@@ -69,8 +97,9 @@ public class Main {
 
     static int dig(int num) {
         int result = 0;
-        if ((result = sum(num)) > 9)
-            result = sum(result);
+        while ((result = sum(num)) > 9) {
+            num = result;
+        }
 
         return result;
     }
@@ -88,18 +117,10 @@ public class Main {
 class Position {
     int x;
     int y;
-    int[] xPos = {0, 1, 0, -1};
-    int[] yPos = {1, 0, -1, 0};
 
     public Position(int x, int y) {
         this.x = x;
         this.y = y;
-    }
-
-    public Position move(int direction, int distance) {
-        this.x += xPos[direction % 4] * distance;
-        this.y += yPos[direction % 4] * distance;
-        return new Position(this.x, this.y);
     }
 
     @Override

@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class Main {
+public class Main_JY {
     /*
         String str1 = "ABRACADABRA";
         String str2 = "ECADADABRBCRDARA";
