@@ -5,7 +5,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class Main_JY {
+<<<<<<< HEAD:src/org/wtcm/acmicpc/q2606/Main_JY.java
     public static int[] parent;
+=======
+    static int[] parent;
+>>>>>>> 26888e5afc21906388160f0537482988974840e0:src/org/wtcm/acmicpc/q2606/Main.java
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
