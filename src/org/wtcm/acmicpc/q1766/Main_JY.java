@@ -3,39 +3,56 @@ package org.wtcm.acmicpc.q1766;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.PriorityQueue;
 
 public class Main_JY {
-    static int N,M;
-    static Pair[] pairs;
+    static int N, M;
+    static int[] inDegree;
+    static List<List<Integer>> graph = new ArrayList<>();
+    static PriorityQueue<Integer> pq = new PriorityQueue<>(); // note. 문제에서 작은거부터 풀랬으니 오름차순..
+
+    /* note. 위상정렬
+            1. 모든 노드들의 inDegree를 구하고
+            2. inDegree가 0인 node부터 시작해서
+            3. 자신에게 연결된 노드들의 inDegree를 1씩 낮춘다. (연결된 간선과 자기자신을 지운다고 생각하면 됨.)
+            4. inDegree가 0이 된 노드들로부터 위의 과정을 반복한다.
+     */
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         String[] firstLine = br.readLine().split(" ");
-        N = Integer.parseInt(firstLine[0]);
-        M = Integer.parseInt(firstLine[1]);
-        pairs = new Pair[M];
-        for (int i = 0; i < M; i++) {
-            String[] line = br.readLine().split(" ");
-            pairs[i] = new Pair(Integer.parseInt(line[0]), Integer.parseInt(line[1]));
+        N = Integer.parseInt(firstLine[0]); // problem
+        M = Integer.parseInt(firstLine[1]); // pairs
+        inDegree = new int[N+1];
+
+        for (int i = 0; i < N + 1; i++) {
+            graph.add(new ArrayList<Integer>());
         }
-        Arrays.sort(pairs, (q1, q2) -> q1.prev - q2.prev == 0 ? q1.next - q2.next : q1.prev - q2.prev);
 
-        System.out.print(pairs[0]);
-        for (int i = 1; i < pairs.length; i++)
-            System.out.println(" "+ pairs[i]);
+        int[] line;
+        for (int i = 0; i < M; i++) {
+            line = Arrays.stream(br.readLine().split(" ")).mapToInt((Integer::parseInt)).toArray();
+            inDegree[line[1]]++;
+            graph.get(line[0]).add(line[1]);
+        }
 
-    }
-}
+        for (int i = 1; i <= N; i++)
+            if (inDegree[i] == 0)
+                pq.add(i);
 
-class Pair {
-    int prev;
-    int next;
+        StringBuilder sb = new StringBuilder();
+        while (!pq.isEmpty()) {
+            int currentProblem = pq.poll();
+            sb.append(currentProblem).append(" ");
 
-    public Pair(int prev, int next) {this.prev = prev; this.next = next;}
-
-    @Override
-    public String toString() {
-        return prev + " " + next;
+            for (int nextProblem : graph.get(currentProblem)) {
+                if (--inDegree[nextProblem] == 0)
+                    pq.add(nextProblem);
+            }
+        }
+        System.out.println(sb.toString());
     }
 }
