@@ -40,7 +40,7 @@ fun init() {
         var gold = 1
         val visit = mutableListOf(Point(x, y))
 
-        while (true) {
+        while (true) { // i에 대한 cycle을 찾는 loop --> 언제 똑같은 점으로 돌아오는지.
             dir[digTimes%4].let {
                 gold = gold.dig()
                 x += gold * it.first
@@ -56,7 +56,6 @@ fun init() {
             digTimes++
             gold *= i
         }
-
         dig2[i] = visit
     }
 }

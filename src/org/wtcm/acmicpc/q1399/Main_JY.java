@@ -38,7 +38,7 @@ public class Main_JY {
     }
 
     static int reduceM(int m) {
-        return m+1 % 9 == 0 ? 9 : m % 9;
+        return m % 9 == 0 ? 9 : m % 9;
     }
 
     static int reducePos(int k, int m) {
@@ -52,35 +52,22 @@ public class Main_JY {
         int distance = 0;
         int size = distanceList.size();
 
-        if (m % 3 != 0) {
-            for (int cnt = 0; cnt < k; cnt++) {
+        for (int cnt = 0; cnt < k; cnt++) {
+            if (m % 3 != 0) {
                 idx = cnt % size;
-                direction = cnt % 4;
-                distance = distanceList.get(idx);
-
-                pos.x += xPos[direction] * distance;
-                pos.y += yPos[direction] * distance;
-
-                if ((startPoint = posList.indexOf(pos)) != -1) {
-                    break;
-                }
-                posList.add(new Position(pos.x, pos.y));
-            }
-        } else {
-            for (int cnt = 0; cnt < k; cnt++) {
+            } else {
                 if (cnt >= size) idx = size - 1;
                 else idx = cnt % size;
-                direction = cnt % 4;
-                distance = distanceList.get(idx);
-
-                pos.x += xPos[direction] * distance;
-                pos.y += yPos[direction] * distance;
-
-                if ((startPoint = posList.indexOf(pos)) != -1) {
-                    break;
-                }
-                posList.add(new Position(pos.x, pos.y));
             }
+            direction = cnt % 4;
+            distance = distanceList.get(idx);
+            pos.x += xPos[direction] * distance;
+            pos.y += yPos[direction] * distance;
+
+            if ((startPoint = posList.indexOf(pos)) != -1) {
+                break;
+            }
+            posList.add(new Position(pos.x, pos.y));
         }
         return Math.max(startPoint, 0);
     }
@@ -101,7 +88,6 @@ public class Main_JY {
         while ((result = sum(num)) > 9) {
             num = result;
         }
-
         return result;
     }
 
