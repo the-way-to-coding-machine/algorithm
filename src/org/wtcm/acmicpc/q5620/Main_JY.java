@@ -11,8 +11,8 @@ public class Main_JY {
     static Point[] points;
 
     /* note. TreeSet 쓰는부분을 다시 공부해야함. 그거하고 추가한 sweep문제들 다시 풀어보자!!
-    *
-    * */
+     *
+     * */
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
@@ -23,34 +23,36 @@ public class Main_JY {
             points[i] = new Point(cur[0], cur[1]);
         }
         Arrays.sort(points, (p1, p2) -> p1.x - p2.x); // x 좌표로만 sorting.. 이거 불 안켜주지만 없으면 에러남..-.-
-        TreeSet<Point> candidates = new TreeSet<>((p1, p2) -> p1.y == p2.y ? p1.x - p2.x : p1.y - p2.y);
-        int min = distance(points[0], points[1]);
+        TreeSet<Point> candidates = new TreeSet<>((p1, p2) -> p1.y == p2.y ? p1.x - p2.x : p1.y - p2.y); // 아래쪽부터, 왼쪽부터
+
+        int closest = distance(points[0], points[1]);
         candidates.add(points[0]);
         candidates.add(points[1]);
+
         int start = 0;
         for (int i = 2; i < N; i++) {
             Point currentPoint = points[i];
 
-            while (start < i) {
+            while (start < i) { // 여기서 가로로 솎아내고
                 Point candidatePoint = points[start];
                 int x = currentPoint.x - candidatePoint.x;
-                if (x * x > min) { // 왜 x만 비교하나..?
+                if (x * x > closest) { // todo. x제곱과 거리를 비교하는게 무슨 의미가 있나..?
                     candidates.remove(candidatePoint);
                     start++;
                 } else {
                     break;
                 }
             }
-            int d = (int)Math.sqrt(min)+1;
-            Point lower = new Point(-100000, currentPoint.y-d);
-            Point upper = new Point(100000, currentPoint.y+d);
-            for (Point point : candidates.subSet(lower, upper)) {
+            int d = (int) Math.sqrt(closest) + 1; // todo. 여기도 왜 거리에 sqrt를 해서 y에 +=를 하지..?
+            Point lower = new Point(-100000, currentPoint.y - d);
+            Point upper = new Point(100000, currentPoint.y + d);
+            for (Point point : candidates.subSet(lower, upper)) { // 여기서 세로로 솎아낸다.
                 int dis = distance(currentPoint, point);
-                min = Math.min(dis,min);
+                closest = Math.min(dis, closest);
             }
             candidates.add(currentPoint);
         }
-        System.out.println(min);
+        System.out.println(closest);
     }
 
     static int distance(Point p1, Point p2) {
