@@ -28,12 +28,13 @@ public class Q3 {
         int[] left = new int[a.length];
         int[] right = new int[a.length];
         for (int i = 0; i < a.length; i++) {
+            int j =a.length-1-i;
             if (a[i] < lMin)
                 lMin = a[i];
             left[i] = lMin;
-            if (a[a.length-1-i] < rMin)
-                rMin = a[a.length-1-i];
-            right[a.length-1-i] = rMin;
+            if (a[j] < rMin)
+                rMin = a[j];
+            right[j] = rMin;
         }
 
         for (int cur = 0; cur < a.length; cur++) {
