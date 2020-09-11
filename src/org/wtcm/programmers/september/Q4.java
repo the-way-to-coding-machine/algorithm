@@ -14,7 +14,6 @@ package org.wtcm.programmers.september;
             a = [[0,1,0], [1,1,1], [1,1,0], [0,1,1]] | answer : 6
             a = [[1,0,0], [1,0,0]] | answer : 0
             a = [[1,0,0,1,1], [0,0,0,0,0], [1,1,0,0,0], [0,0,0,0,1]] | answer : 72
-
 *
 * */
 public class Q4 {
