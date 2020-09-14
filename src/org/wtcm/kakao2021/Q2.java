@@ -4,74 +4,48 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Q2 {
-    static String[] orders = {"ABCFG", "AC", "CDE", "ACDE", "BCFG", "ACDEH"};
-    static int[] course = {2, 3, 4};
-    static LinkedHashMap<Character, Integer> menu = new LinkedHashMap<>();
-    static List<Map.Entry> entries;
-    static StringBuilder set;
-    static HashMap<String, Integer> picked;
-    static List<String> menus = new ArrayList<>();
-    static int max;
+    static HashMap<String, Integer> map = new HashMap<>();
 
     public static void main(String[] args) {
-        String[] answer;
+        String[] orders = {"ABCFG", "AC", "CDE", "ACDE", "BCFG", "ACDEH"};
+        int[] course = {2, 3, 4};
 
-        for (int i = 0; i < orders.length; i++) {
-            String order = orders[i];
-            for (int j = 0; j < orders[i].length(); j++) {
-                if (menu.containsKey(order.charAt(j))) {
-                    menu.put(order.charAt(j), (menu.get(order.charAt(j)) + 1));
-                } else {
-                    menu.put(order.charAt(j), 0);
-                }
-            }
-        }
-        entries = new ArrayList<>(menu.entrySet());
-
-        entries = entries.stream()
-                .filter(it -> (int) it.getValue() >= 2)
-                .collect(Collectors.toList());
-
-        entries.sort((e1, e2) -> (int) e2.getValue() - (int) e1.getValue());
-
-        for (int number : course) { // 2개, 3개, 4개...
-            max = 0;
-            for (int i = 0; i < number; i++)
-                max += (int)entries.get(i).getValue();
-
-            picked = new HashMap<>();
-            pick(0,0, entries.size(), number);
-        }
-        answer = new String[menus.size()];
-
-        int idx = 0;
-        for (String what : menus) {
-            answer[idx++] = what;
-        }
+        Arrays.stream(solution(orders, course)).forEach(System.out::println);
     }
 
-    static void pick(int prefer, int cur, int total, int num) {
-        if (num == 0) {
-            if (prefer >= max) {
-                set = new StringBuilder();
-                for (String menu : picked.keySet()) {
-                    set.append(menu);
-                }
-                menus.add(set.toString());
+    static String[] solution(String[] orders, int[] course) {
+        int idx = 0;
+        for (int num : course) {
+            for (String order : orders) {
+                char[] arr = order.toCharArray();
+                Arrays.sort(arr);
+                pick(arr, 0, num);
+            }
+            for (Map.Entry e :map.entrySet().stream().filter(it -> it.getValue() == max).collect(Collectors.toList()))
+                System.out.println(e.getKey());
+            max = 0;
+            map.clear();
+        }
+        return null;
+    }
+    static StringBuilder picked = new StringBuilder();
+    static int max = 1;
+    static void pick(char[] order, int cur, int toPick) {
+        if (toPick == 0) {
+            if (map.containsKey(picked.toString())) {
+                if (max <= map.get(picked.toString()))
+                    max++;
+                map.put(picked.toString(), (map.get(picked.toString())+1));
+            } else {
+                map.put(picked.toString(), 1);
             }
             return;
         }
 
-        String m;
-        int p;
-        for (int i = cur; i < total; i++) {
-            m = entries.get(i).getKey().toString();
-            p = (int)entries.get(i).getValue();
-            picked.put(m, p);
-            prefer += p;
-            pick(prefer,i+1, total, num-1);
-            picked.remove(entries.get(i).getKey().toString());
-            prefer -= p;
+        for (int i = cur; i < order.length; i++) {
+            picked.append(order[i]);
+            pick(order, i+1, toPick-1);
+            picked.deleteCharAt(picked.length()-1);
         }
     }
 }
