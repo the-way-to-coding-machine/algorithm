@@ -6,9 +6,9 @@ public class Q3 {
     static int min = Integer.MAX_VALUE;
     static int sum;
     public static void main(String[] args) {
-//        int n = 73425;
-//        int n = 10007;
-        int n = 9;
+//        int n = 734298552;
+        int n = 10007;
+//        int n = 9;
         Arrays.stream(solution(n)).forEach(System.out::println);
     }
 
@@ -32,9 +32,12 @@ public class Q3 {
         // note. caching을 하면 훨씬 빨리할 수 있지만 이 문제에서는 input이 작아서 brute force도 충분히 가능..
 
         for (int position = 1; position < number.length(); position++) {
-            if (number.charAt(position) == '0') continue;
             int left = Integer.parseInt(number.substring(0, position));
             int right = Integer.parseInt(number.substring(position));
+
+            if (number.charAt(position) == '0')
+                if (position == number.length()-1) right = 0;
+                else continue;
 
             split(String.valueOf(left+right), cnt+1);
         }
