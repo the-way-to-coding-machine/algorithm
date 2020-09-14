@@ -3,24 +3,40 @@ package org.wtcm.line2021;
 import java.util.Arrays;
 
 public class Q3 {
+    static int min = Integer.MAX_VALUE;
+    static int sum;
     public static void main(String[] args) {
-        int n = 73425;
+//        int n = 73425;
 //        int n = 10007;
-//        int n = 9;
+        int n = 9;
         Arrays.stream(solution(n)).forEach(System.out::println);
     }
 
     static int[] solution(int n) {
         String number = String.valueOf(n);
 
-        for (int pos = 1; pos < number.length(); pos++){
-            Integer.parseInt(number.substring(0,pos));
-            Integer.parseInt(number.substring(pos));
-        }
-        return null;
+        split(number, 0);
+
+        return new int[] {min, sum};
     }
 
-    static int split() { //이걸 재귀함수로...
-        return 0;
+    static void split(String number, int cnt) { //이걸 재귀함수로...
+        if (number.length() == 1) {
+            if (cnt < min) {
+                sum = Integer.parseInt(number);
+                min = cnt;
+            }
+            return;
+        }
+
+        // note. caching을 하면 훨씬 빨리할 수 있지만 이 문제에서는 input이 작아서 brute force도 충분히 가능..
+
+        for (int position = 1; position < number.length(); position++) {
+            if (number.charAt(position) == '0') continue;
+            int left = Integer.parseInt(number.substring(0, position));
+            int right = Integer.parseInt(number.substring(position));
+
+            split(String.valueOf(left+right), cnt+1);
+        }
     }
 }
