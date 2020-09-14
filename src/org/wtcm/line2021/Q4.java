@@ -1,21 +1,18 @@
 package org.wtcm.line2021;
 
 
-import java.util.Arrays;
-
 public class Q4 {
     static int[] rowDir = {0, 1, 0, -1}; // 오 밑 왼 위
     static int[] colDir = {1, 0, -1, 0};
-    static int width, height, length = Integer.MAX_VALUE;
+    static int width, height, length;
     static int[][] map;
-    static boolean[][] visited;
 
     public static void main(String[] args) {
-        int[][] maze = {
-                {0, 1, 0, 1}
-                , {0, 1, 0, 0}
-                , {0, 0, 0, 0}
-                , {1, 0, 1, 0}};
+//        int[][] maze = {
+//                {0, 1, 0, 1}
+//                , {0, 1, 0, 0}
+//                , {0, 0, 0, 0}
+//                , {1, 0, 1, 0}};
 //        int[][] maze = {
 //                  {0, 1, 0, 0, 0, 0}
 //                , {0, 1, 0, 1, 1, 0}
@@ -23,6 +20,8 @@ public class Q4 {
 //                , {0, 1, 1, 1, 1, 0}
 //                , {0, 1, 0, 0, 0, 0}
 //                , {0, 0, 0, 1, 1, 0}};
+//        int[][] maze = {{0,1,0,0,0,0},{0,0,1,0,0,0},{0,0,0,1,0,0},{0,0,0,0,1,0},{0,0,0,0,0,0},{1,1,1,1,1,0}};
+        int[][] maze = {{0,0,0,0,0,0},{1,1,1,0,1,1},{0,0,0,0,0,0},{1,0,1,1,1,1,},{0,0,0,0,0,0},{1,1,0,1,1,0}};
 
         System.out.println(solution(maze));
     }
@@ -32,45 +31,30 @@ public class Q4 {
         width = maze[0].length;
         map = maze;
 
-        visited = new boolean[height][width];
-        for (int i = 0; i < height; i++)
-            Arrays.fill(visited[i], false);
-
-
-//        simpleDFS(0, 0, 0);
-        leftHandRule(0,0,0);
+        leftHandRule(0, 0, 1, 0);
 
         return length;
     }
 
-    static void leftHandRule(int row, int col, int move) {
+    //note. 답은 다 나오는데 코드가 별로 맘에 안든다.. 괜찮은건가 이거..?
+    static void leftHandRule(int row, int col, int dir, int move) {
         if (row == height - 1 && col == width - 1) {
-            length = Math.min(length, move);
+            length = move;
             return;
         }
 
-        /*
-         * 1. 좌벽 유무 확인
-         *   --> 없으면 왼쪽으로
-         *   --> 있으면 왼쪽으로 회전
-         * 2.
-         * */
         for (int turn = 0; turn < 4; turn++) {
-            int nextRow = row + rowDir[turn];
-            int nextCol = col + colDir[turn];
+            int currentDirection = (dir + turn + 3) % 4;
 
-            int currentLeftRow = row + rowDir[(turn+3)%4];
-            int currentLeftCol = col + colDir[(turn+3)%4];
-
-            if (!isIn(currentLeftRow, currentLeftCol)) continue;
+            int nextRow = row + rowDir[currentDirection];
+            int nextCol = col + colDir[currentDirection];
 
             if (!isIn(nextRow, nextCol)) continue;
             if (map[nextRow][nextCol] != 0) continue;
-
-            leftHandRule(nextRow, nextCol, move+1);
+            if (length != 0)    return;
+            leftHandRule(nextRow, nextCol, currentDirection, move + 1);
         }
     }
-
 
 
 //    static void simpleDFS(int row, int col, int cur) {
