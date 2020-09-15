@@ -1,4 +1,4 @@
-package org.wtcm.practice;
+package org.wtcm.practice.segmenttree;
 
 public class SegmentTree {
     private int[] tree;
