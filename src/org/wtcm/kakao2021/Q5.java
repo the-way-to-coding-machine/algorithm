@@ -1,196 +1,147 @@
 package org.wtcm.kakao2021;
 
-import java.util.*;
+
+import java.text.ParseException;
+import java.util.Arrays;
+import java.util.PriorityQueue;
 
 public class Q5 {
     public static void main(String[] args) {
+        String play_time = "02:03:55";
+        String adv_time = "00:14:15";
+        String[] logs = {
+                "01:20:15-01:45:14"
+                , "00:40:31-01:00:00"
+                , "00:25:50-00:48:29"
+                , "01:30:59-01:53:29"
+                , "01:37:44-02:02:30"};
+
+//        String play_time = "99:59:59";
+//        String adv_time = "25:00:00";
+//        String[] logs = {
+//                "69:59:59-89:59:59"
+//                , "01:00:00-21:00:00"
+//                , "79:59:59-99:59:59"
+//                , "11:00:00-31:00:00"};
+//
+//        String play_time = "50:00:00";
+//        String adv_time = "50:00:00";
+//        String[] logs = {
+//                "15:36:51-38:21:49"
+//                , "10:14:18-15:36:51"
+//                , "38:21:49-42:51:45"};
+
+        System.out.println(solution(play_time, adv_time, logs));
+    }
+
+    static String solution(String play_time, String adv_time, String[] logs) {
+        Time playTime = new Time(play_time);
+        Time advTime = new Time(adv_time);
+        PriorityQueue<TimeRange> logArr = new PriorityQueue<>();
+
+        int idx = 0;
+        for (String log : logs) {
+            String[] tmp = log.split("-");
+            logArr.add(new TimeRange(new Time(tmp[0]), new Time(tmp[1])));
+        }
+
 
     }
 
-    static class Period {
-        Period(int startPoint){
-            this.startPoint = startPoint;
-        }
-        Period(int startPoint, int endPoint){
-            this.startPoint = startPoint;
-            this.endPoint = endPoint;
-        }
-        int startPoint;
-        int endPoint;
-        int amount;
-        int count;
+}
+
+class TimeRange implements Comparable<TimeRange>{
+    Time start;
+    Time end;
+
+    public TimeRange(Time start, Time end) {
+        this.start = start;
+        this.end = end;
     }
 
-
-    static String estimateBestStartPoint(String play_time, String adv_time, String[] logs){
-        String result = "";
-        List<Period> periods = new ArrayList<Period>();
-
-        String timePeriod = "";
-        int startPoint;
-        int endPoint;
-        for (int i=0; i<logs.length; i++){
-            timePeriod = logs[i];
-            String[] splitedTimePeriod = timePeriod.split("-");
-            startPoint = parseToAmount(splitedTimePeriod[0]);
-            endPoint = parseToAmount(splitedTimePeriod[1]);
-            periods.add( new Period(startPoint, endPoint) );
-        }
-
-        Map<Integer, Period> sections = makeAmountPeriods( periods );
-
-        result = pickBestSection( sections, parseToAmount(play_time), parseToAmount(adv_time) );
-
-        System.out.println(result);
-        return result;
+    public Time playTime() {
+        return end.sub(start);
     }
 
-    static int parseToAmount(String timeExp){
-        String[] splitedTimeExp = timeExp.split(":");
-        int hh = Integer.parseInt(splitedTimeExp[0]);
-        int mm = Integer.parseInt(splitedTimeExp[1]);
-        int ss = Integer.parseInt(splitedTimeExp[2]);
-        int total = (hh * 60 * 60) + (mm * 60) + (ss);
-        return total;
+    @Override
+    public int compareTo(TimeRange o) {
+        return Integer.parseInt(this.start.sub(o.start).HH);
+    }
+}
+
+class Time implements Comparable<Time> {
+    String HH;
+    String MM;
+    String SS;
+
+    public Time(String time) {
+        String[] tmp = time.split(":");
+        this.HH = tmp[0];
+        this.MM = tmp[1];
+        this.SS = tmp[2];
     }
 
-    static Map<Integer, Period> makeAmountPeriods(List<Period> logPeriods){
-        Map<Integer, Period> result = new HashMap<Integer, Period>();
-
-        List<Integer> points = new ArrayList<Integer>();
-        for (int i=0; i<logPeriods.size(); i++){
-            Period p = logPeriods.get(i);
-            points.add(p.startPoint);
-            points.add(p.endPoint);
-        }
-
-        points.sort(new Comparator<Integer>(){
-            @Override
-            public int compare(Integer p1, Integer p2) {
-                return p1 - p2;
-            }
-        });
-
-        Integer p1, p2;
-        for (int i=0; i<points.size() -1; i++){
-            p1 = points.get(i);
-            p2 = points.get(i +1);
-            if (p1 == p2)
-                break;
-            for (int j=0; j<logPeriods.size(); j++ ) {
-                Period logPeriod = logPeriods.get(j);
-                boolean p1ContainsPeriod = (logPeriod.startPoint <= p1 && p1 <= logPeriod.endPoint);
-                boolean p2ContainsPeriod = (logPeriod.startPoint <= p2 && p2 <= logPeriod.endPoint);
-                int amount = p2 - p1;
-                if (p1ContainsPeriod || p2ContainsPeriod){
-                    Period sectionPeriod;
-                    int sectionKey = p1;
-                    if (result.containsKey(sectionKey)){
-                        sectionPeriod = result.get(sectionKey);
-                        sectionPeriod.count += 1;
-                    }else{
-                        sectionPeriod = new Period(sectionKey);
-                        sectionPeriod.amount = amount;
-                        sectionPeriod.count = 1;
-                        result.put(sectionKey, sectionPeriod);
-                    }
-                    result.put(sectionKey, sectionPeriod);
-                }
-            }
-        }
-
-        return result;
+    public Time(String hh, String mm, String ss) {
+        this.HH = hh;
+        this.MM = mm;
+        this.SS = ss;
     }
 
-    static String pickBestSection(Map<Integer, Period> sections, Integer playSeconds, Integer advSeconds){
-        String result = "";
-
-        List<Period> sectionList = new ArrayList<>();
-        for (Integer key : sections.keySet()){
-            Period p = sections.get(key);
-            sectionList.add(p);
+    public Time sub(Time time) {
+        int h = Integer.parseInt(this.HH)-Integer.parseInt(time.HH);
+        int m = Integer.parseInt(this.MM)-Integer.parseInt(time.MM);
+        if (m < 0) {
+            h--;
+            m += 60;
         }
-
-        sectionList.sort(new Comparator<Period>(){
-            @Override
-            public int compare(Period p1, Period p2) {
-                return p1.startPoint - p2.startPoint;
-            }
-        });
-
-
-        int maxAmount = Integer.MIN_VALUE;
-        for( int i=0; i<sectionList.size(); i++){
-            Period section = sectionList.get(i);
-            int testAdvStartPoint = section.startPoint;
-            int testAdvEndPoint = section.startPoint + advSeconds;
-            int thisAmount = 0;
-
-            for (int j=i+1; j<sectionList.size(); j++){
-                Period checkSection = sectionList.get(j);
-                int checkStartPoint = checkSection.startPoint;
-                int checkEndPoint = checkSection.endPoint;
-                boolean p1Contains = testAdvStartPoint <= checkStartPoint && checkStartPoint <= testAdvEndPoint;
-                boolean p2Contains = testAdvStartPoint <= checkEndPoint && checkEndPoint <= testAdvEndPoint;
-                if (p1Contains || p2Contains){
-                    int r1 = testAdvEndPoint - testAdvStartPoint;
-                    int r2 = checkStartPoint - checkEndPoint;
-                    int collisionDist = collisionDist(testAdvStartPoint, r1, checkEndPoint, r2) ;
-                    thisAmount += (collisionDist * checkSection.amount);
-                }else{
-                    break;
-                }
-            }
-
-            if (maxAmount < thisAmount){
-                maxAmount = thisAmount;
-                result = parseTimeExpression(testAdvStartPoint);
+        int s = Integer.parseInt(this.SS)-Integer.parseInt(time.SS);
+        if (s < 0) {
+            m--;
+            s += 60;
+            if (m < 0) {
+                h--;
+                m+=60;
             }
         }
 
-        return result;
+        String hh = String.valueOf(h);
+        String mm = String.valueOf(m);
+        String ss = String.valueOf(s);
+
+        return new Time(hh,mm,ss);
     }
 
-    static int collisionDist(int ax, int aR, int bx, int bR){
-        int dist = (ax - bx) - (aR + bR);
-        return dist *-1;
+    public Time add(Time time) {
+        int h = Integer.parseInt(this.HH)+Integer.parseInt(time.HH);
+        int m = Integer.parseInt(this.MM)+Integer.parseInt(time.MM);
+        if (m > 60) {
+            h++;
+            m-= 60;
+        }
+        int s = Integer.parseInt(this.SS)+Integer.parseInt(time.SS);
+        if (s > 60) {
+            m++;
+            s -= 60;
+            if (m > 60) {
+                h++;
+                m -= 60;
+            }
+        }
+
+        String hh = String.valueOf(h);
+        String mm = String.valueOf(m);
+        String ss = String.valueOf(s);
+
+        return new Time(hh,mm,ss);
     }
 
-    static String parseTimeExpression(int timeAmount){
-        StringBuilder sb = new StringBuilder();
-        int hh = timeAmount / (60 * 60);
-        int mm = (timeAmount / 60)  % 60;
-        int ss = timeAmount % 60;
+    @Override
+    public String toString() {
+        return HH + ":" + MM + ":" + SS;
+    }
 
-        if (hh == 0){
-            sb.append("00");
-        }else if (hh < 10){
-            sb.append("0");
-            sb.append(String.valueOf(hh));
-        }else{
-            sb.append(String.valueOf(hh));
-        }
-        sb.append(":");
-
-        if (mm == 0){
-            sb.append("00");
-        }else if (mm < 10){
-            sb.append("0");
-            sb.append(String.valueOf(mm));
-        }else{
-            sb.append(String.valueOf(mm));
-        }
-        sb.append(":");
-
-        if (ss == 0){
-            sb.append("00");
-        }else if (ss < 10){
-            sb.append("0");
-            sb.append(String.valueOf(ss));
-        }else{
-            sb.append(String.valueOf(ss));
-        }
-
-        return sb.toString();
+    @Override
+    public int compareTo(Time o) {
+        return Integer.parseInt(this.sub(o).HH);
     }
 }
