@@ -9,13 +9,40 @@ public class Main_JY {
         OutputWriter out = new OutputWriter(System.out);
         Task question = new Task();
 
-        System.out.println(question.solution(in, out));
+        question.solution(in, out);
+        out.close();
     }
 }
 
 class Task {
-    int solution(InputReader in, OutputWriter out) {
-        return 0;
+    int N, K;
+    int[] lines;
+
+    void solution(InputReader in, OutputWriter out) {
+        K = in.nextInt();
+        N = in.nextInt();
+        lines = new int[K];
+
+        long min = 1, max = 0;
+        for (int i = 0; i < K; i++) {
+            lines[i] = in.nextInt();
+            max = Math.max(max, lines[i]);
+        }
+
+        long mid, ans = 0;
+        while (min <= max) {
+            mid = (min + max) >> 1;
+            int tmp = 0;
+
+            for (int line : lines) {
+                tmp += (line / mid);
+            }
+            if (tmp >= N) { // 더 많이 만들었음.. --> 더 길게 가보자
+                ans = Math.max(mid, ans);
+                min = mid + 1;
+            } else max = mid - 1;
+        }
+        out.print(ans);
     }
 }
 
