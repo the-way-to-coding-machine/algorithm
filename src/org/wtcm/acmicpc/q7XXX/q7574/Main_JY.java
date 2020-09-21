@@ -1,4 +1,4 @@
-package org.wtcm.acmicpc.q15XXX.q15422;
+package org.wtcm.acmicpc.q7XXX.q7574;
 
 import java.io.*;
 import java.util.InputMismatchException;
@@ -9,16 +9,18 @@ public class Main_JY {
         OutputWriter out = new OutputWriter(System.out);
 
         Task question = new Task();
-        question.solution(in,out);
+        question.solution(in, out);
+        out.close();
     }
 }
 
 class Task {
-    void solution(InputReader in, OutputWriter out) {
 
+    void solution(InputReader in, OutputWriter out) {
 
     }
 }
+
 
 class InputReader {
     private InputStream stream;

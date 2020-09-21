@@ -1,7 +1,9 @@
-package org.wtcm.acmicpc.q15XXX.q15422;
+package org.wtcm.acmicpc.q15XXX.q15237;
 
 import java.io.*;
 import java.util.InputMismatchException;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class Main_JY {
     public static void main(String[] args) {
@@ -9,14 +11,30 @@ public class Main_JY {
         OutputWriter out = new OutputWriter(System.out);
 
         Task question = new Task();
-        question.solution(in,out);
+        question.solution(in, out);
+        out.close();
     }
 }
 
 class Task {
+    int N, M;
+    Map<Integer, Integer> map = new LinkedHashMap<>();
     void solution(InputReader in, OutputWriter out) {
+        N = in.nextInt();
+        M = in.nextInt();
 
+        for (int i = 0; i < N; i++) {
+            int num = in.nextInt();
+            if (map.containsKey(num)) {
+                map.put(num, map.get(num)+1);
+            } else {
+                map.put(num, 1);
+            }
+        }
 
+        for (int num : map.keySet())
+            for (int i = 0; i < map.get(num); i++)
+                out.print(num+" ");
     }
 }
 

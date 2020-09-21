@@ -1,4 +1,4 @@
-package org.wtcm.acmicpc.q15XXX.q15422;
+package org.wtcm.acmicpc.q11XXX.q11054;
 
 import java.io.*;
 import java.util.InputMismatchException;
@@ -10,12 +10,13 @@ public class Main_JY {
 
         Task question = new Task();
         question.solution(in,out);
+        out.close();
     }
 }
 
 class Task {
-    void solution(InputReader in, OutputWriter out) {
 
+    void solution(InputReader in, OutputWriter out) {
 
     }
 }
