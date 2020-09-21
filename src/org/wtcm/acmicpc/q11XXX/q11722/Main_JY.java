@@ -22,7 +22,7 @@ class Task {
     void solution(InputReader in, OutputWriter out) {
         N = in.nextInt();
         arr = new int[N];
-        for (int i = N-1; i >= 0; i--)
+        for (int i = 0; i < N; i++)
             arr[i] = in.nextInt();
 
         vector = new int[N+1];
@@ -34,8 +34,7 @@ class Task {
                 vector[++idx] = arr[i];
             } else {
                 int position = lowerBound(0, idx, arr[i]);
-                if (position == idx)
-                    vector[position] = arr[i];
+                vector[position] = arr[i];
             }
         }
         out.print(idx);

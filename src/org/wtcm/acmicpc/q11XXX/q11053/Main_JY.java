@@ -11,7 +11,7 @@ public class Main_JY {
 
         Task question = new Task();
 
-        question.solution(in, out);
+        question.binSearch(in, out);
         out.close();
     }
 }
@@ -19,6 +19,7 @@ public class Main_JY {
 class Task {
     int N;
     int[] arr;
+    int[] lis;
     void solution(InputReader in, OutputWriter out) {
         N = in.nextInt();
         arr = in.nextIntArray(N);
@@ -33,6 +34,39 @@ class Task {
         }
         Arrays.sort(dp);
         out.print(dp[dp.length-1]);
+    }
+
+    void binSearch(InputReader in, OutputWriter out) {
+        N = in.nextInt();
+        arr = in.nextIntArray(N);
+        lis = new int[N+1];
+
+        int idx = 0;
+        lis[idx] = Integer.MIN_VALUE;
+        for (int i = 0; i < N; i++) {
+            if (arr[i] > lis[idx]) {
+                lis[++idx] = arr[i];
+            } else {
+                int position = lowerBound(0, idx, arr[i]);
+                lis[position] = arr[i];
+            }
+        }
+        out.print(idx);
+    }
+
+    int lowerBound(int begin, int end, int target) {
+        int mid = 0;
+
+        while(begin < end) {
+            mid = (begin+end) >> 1;
+
+            if (lis[mid] < target) {
+                begin = mid+1;
+            } else {
+                end = mid;
+            }
+        }
+        return end;
     }
 }
 
