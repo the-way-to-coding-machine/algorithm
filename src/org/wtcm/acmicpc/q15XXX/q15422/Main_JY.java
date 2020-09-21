@@ -1,7 +1,10 @@
 package org.wtcm.acmicpc.q15XXX.q15422;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.InputMismatchException;
+import java.util.PriorityQueue;
 
 public class Main_JY {
     public static void main(String[] args) {
@@ -9,14 +12,65 @@ public class Main_JY {
         OutputWriter out = new OutputWriter(System.out);
 
         Task question = new Task();
-        question.solution(in,out);
+        question.solution(in, out);
+        out.close();
     }
 }
 
 class Task {
+    int N, M, F, S, T; // city, road, flight, departure, travel to
+    ArrayList<int[]>[] adjList;
+
     void solution(InputReader in, OutputWriter out) {
+        N = in.nextInt();
+        M = in.nextInt();
+        F = in.nextInt();
+        S = in.nextInt();
+        T = in.nextInt();
 
+        adjList = new ArrayList[N];
+        for (int i = 0; i < N; i++)
+            adjList[i] = new ArrayList<>();
 
+        for (int i = 0; i < M; i++) {
+            int[] input = in.nextIntArray(3);
+            adjList[input[0]].add(new int[]{input[1], input[2]});
+            adjList[input[1]].add(new int[]{input[0], input[2]});
+        }
+        int[] ret1 = dijkstra(S, T);
+        int re1 = ret1[T];
+        for (int i = 0; i < F; i++) {
+            int[] input = in.nextIntArray(2);
+            adjList[input[0]].add(new int[]{input[1], 0});
+        }
+        int[] ret2 = dijkstra(S, T);
+        int re2 = ret2[T];
+
+        out.print(Math.min(re1,re2));
+    }
+
+    int[] dijkstra(int start, int dest) {
+        int[] distance = new int[N];
+        Arrays.fill(distance, Integer.MAX_VALUE);
+        PriorityQueue<int[]> pq = new PriorityQueue<>((v1,v2) -> v1[1]-v2[1]);
+
+        pq.add(new int[]{start, 0});
+        distance[start] = 0;
+        while (!pq.isEmpty()) {
+            int[] cur = pq.poll();
+
+            if (cur[1] > distance[cur[0]]) continue;
+            if (cur[0] == dest) break;
+
+            for (int[] next : adjList[cur[0]]) {
+                int nextPath = next[1] + distance[cur[0]];
+                if (distance[next[0]] > nextPath) {
+                    distance[next[0]] = nextPath;
+                    pq.add(new int[]{next[0], nextPath});
+                }
+            }
+        }
+        return distance;
     }
 }
 
