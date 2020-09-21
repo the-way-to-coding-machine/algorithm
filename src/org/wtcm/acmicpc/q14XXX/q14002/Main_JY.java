@@ -1,7 +1,10 @@
 package org.wtcm.acmicpc.q14XXX.q14002;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.List;
+import java.util.Stack;
 
 public class Main_JY {
     public static void main(String[] args) {
@@ -18,37 +21,48 @@ public class Main_JY {
 class Task {
     int N;
     int[] arr;
-    int[] vector;
+    int[] lis;
+    List<Integer> trace;
+
     void solution(InputReader in, OutputWriter out) {
         N = in.nextInt();
         arr = in.nextIntArray(N);
-        vector = new int[N+1];
+        lis = new int[N + 1];
+        trace = new ArrayList<>();
 
         int idx = 0;
-        vector[idx] = Integer.MIN_VALUE;
+        lis[idx] = Integer.MIN_VALUE;
         for (int i = 0; i < N; i++) {
-            if (vector[idx] < arr[i]) {
-                vector[++idx] = arr[i];
+            if (lis[idx] < arr[i]) {
+                lis[++idx] = arr[i];
+                trace.add(idx);
+
             } else {
                 int position = lowerBound(0, idx, arr[i]);
-                if (position == idx)
-                    vector[position] = arr[i];
+                lis[position] = arr[i];
+                trace.add(position);
             }
         }
         out.print(idx);
         out.println();
-        for (int i = 1; i <= idx; i++)
-            out.print(vector[i]+" ");
+        Stack<Integer> stack = new Stack<>();
+        for (int i = N-1; i >= 0; i--) {
+            if (idx == trace.get(i)) {
+                stack.push(arr[i]);
+                idx--;
+            }
+        }
+        while(!stack.isEmpty()) out.print(stack.pop()+" ");
     }
 
     int lowerBound(int begin, int end, int target) {
         int mid;
 
         while (begin < end) {
-            mid = (begin+end) >> 1;
+            mid = (begin + end) >> 1;
 
-            if (target > vector[mid]) {
-                begin = mid+1;
+            if (target > lis[mid]) {
+                begin = mid + 1;
             } else {
                 end = mid;
             }
