@@ -1,9 +1,8 @@
 package org.wtcm.acmicpc.q15XXX.q15237;
 
 import java.io.*;
-import java.util.InputMismatchException;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Main_JY {
     public static void main(String[] args) {
@@ -18,23 +17,46 @@ public class Main_JY {
 
 class Task {
     int N, M;
-    Map<Integer, Integer> map = new LinkedHashMap<>();
+    Map<Integer, Number> map = new LinkedHashMap<>();
+
     void solution(InputReader in, OutputWriter out) {
         N = in.nextInt();
         M = in.nextInt();
 
         for (int i = 0; i < N; i++) {
-            int num = in.nextInt();
-            if (map.containsKey(num)) {
-                map.put(num, map.get(num)+1);
+            int cur = in.nextInt();
+            if (map.containsKey(cur)) {
+                Number tmp = map.get(cur);
+                tmp.frequency++;
+                map.put(cur, tmp);
             } else {
-                map.put(num, 1);
+                map.put(cur, new Number(cur, i, 1));
             }
         }
+        for (Number num : map.values().stream().sorted().collect(Collectors.toList())) {
+            for (int i = 0; i < num.frequency; i++) {
+                out.print(num.number+" ");
+            }
+        }
+    }
+    private static class Number implements Comparable<Number> {
+        int number;
+        int order;
+        int frequency;
 
-        for (int num : map.keySet())
-            for (int i = 0; i < map.get(num); i++)
-                out.print(num+" ");
+        Number(int number, int order, int frequency) {
+            this.number = number;
+            this.order = order;
+            this.frequency = frequency;
+        }
+
+        @Override
+        public int compareTo(Number o) {
+            return o.frequency - this.frequency == 0
+                    ? o.order - this.order == 0
+                    ? o.number - this.number : this.order - o.order
+                    : o.frequency - this.frequency;
+        }
     }
 }
 
