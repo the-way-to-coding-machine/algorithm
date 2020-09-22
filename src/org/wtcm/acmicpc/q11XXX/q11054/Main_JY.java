@@ -15,9 +15,56 @@ public class Main_JY {
 }
 
 class Task {
-
+    int N;
+    int[] forwardArr, reverseArr;
     void solution(InputReader in, OutputWriter out) {
+        N = in.nextInt();
+        forwardArr = new int[N];
+        reverseArr = new int[N];
+        for (int i = 0; i < N; i++) {
+            int num = in.nextInt();
+            forwardArr[i] = num;
+            reverseArr[i] = -num;
+        }
 
+        int[] forwardLis = new int[N+1];
+        int[] reverseLis = new int[N+1];
+        forwardLis[0] = reverseLis[0] = Integer.MIN_VALUE;
+        int max = Integer.MIN_VALUE;
+        for (int i = 0; i < N; i++) {
+            int idx=0, xdi=0;
+            for (int j = 0; j <= i; j++) {
+                if (forwardArr[j] > forwardLis[idx]) forwardLis[++idx] = forwardArr[j];
+                else {
+                    int position = lowerBound(forwardLis, 0, idx, forwardArr[j]);
+                    forwardLis[position] = forwardArr[j];
+                }
+            }
+            for (int j = i; j < N; j++) {
+                if (reverseArr[j] > reverseLis[xdi]) reverseLis[++xdi] = reverseArr[j];
+                else {
+                    int position = lowerBound(reverseLis, 0, xdi, reverseArr[j]);
+                    reverseLis[position] = reverseArr[j];
+                }
+            }
+            max = Math.max(max, (idx+xdi)-1);
+        }
+        out.print(max);
+    }
+
+    int lowerBound(int[] arr, int begin, int end, int target) {
+        int mid;
+
+        while (begin < end) {
+            mid = (begin + end) >> 1;
+
+            if (target > arr[mid]) {
+                begin = mid + 1;
+            } else {
+                end = mid;
+            }
+        }
+        return end;
     }
 }
 
