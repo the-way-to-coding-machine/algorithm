@@ -23,7 +23,7 @@ class Task {
         N = in.nextInt();
         arr = new int[N];
         for (int i = 0; i < N; i++)
-            arr[i] = in.nextInt();
+            arr[i] = -in.nextInt();
 
         vector = new int[N+1];
 
