@@ -1,198 +1,180 @@
 package org.wtcm.acmicpc.q15XXX.q15422;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.InputMismatchException;
-import java.util.PriorityQueue;
+import java.util.*;
 
 public class Main_JY {
-    public static void main(String[] args) {
-        InputReader in = new InputReader(System.in);
-        OutputWriter out = new OutputWriter(System.out);
-
+    public static void main(String[] args) throws IOException {
         Task question = new Task();
-        question.solution(in, out);
-        out.close();
+//        question.solution();
+        question.check();
     }
 }
 
 class Task {
     int N, M, F, S, T; // city, road, flight, departure, travel to
-    ArrayList<int[]>[] adjList;
+    ArrayList<Pair>[] adjList;
 
-    void solution(InputReader in, OutputWriter out) {
-        N = in.nextInt();
-        M = in.nextInt();
-        F = in.nextInt();
-        S = in.nextInt();
-        T = in.nextInt();
+    void solution() throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
+        F = Integer.parseInt(st.nextToken());
+        S = Integer.parseInt(st.nextToken());
+        T = Integer.parseInt(st.nextToken());
 
         adjList = new ArrayList[N];
         for (int i = 0; i < N; i++)
             adjList[i] = new ArrayList<>();
 
         for (int i = 0; i < M; i++) {
-            int[] input = in.nextIntArray(3);
-            adjList[input[0]].add(new int[]{input[1], input[2]});
-            adjList[input[1]].add(new int[]{input[0], input[2]});
-        }
-        int[] ret1 = dijkstra(S, T);
-        int re1 = ret1[T];
-        for (int i = 0; i < F; i++) {
-            int[] input = in.nextIntArray(2);
-            adjList[input[0]].add(new int[]{input[1], 0});
-        }
-        int[] ret2 = dijkstra(S, T);
-        int re2 = ret2[T];
+            st = new StringTokenizer(br.readLine());
+            int from = Integer.parseInt(st.nextToken());
+            int to = Integer.parseInt(st.nextToken());
+            long weight = Long.parseLong(st.nextToken());
 
-        out.print(Math.min(re1,re2));
+            adjList[from].add(new Pair(to, weight));
+            adjList[to].add(new Pair(from, weight));
+        }
+        long unused = dijkstra(S, T);
+
+        long used = Long.MAX_VALUE;
+        for (int i = 0; i < F; i++) {
+            st = new StringTokenizer(br.readLine());
+            int from = Integer.parseInt(st.nextToken());
+            int to = Integer.parseInt(st.nextToken());
+
+            adjList[from].add(new Pair(to, 0));
+            used = Math.min(used, dijkstra(S, T));
+            adjList[from].remove(adjList[to].size() - 1);
+        }
+        System.out.println(Math.min(used, unused));
     }
 
-    int[] dijkstra(int start, int dest) {
-        int[] distance = new int[N];
-        Arrays.fill(distance, Integer.MAX_VALUE);
-        PriorityQueue<int[]> pq = new PriorityQueue<>((v1,v2) -> v1[1]-v2[1]);
+    void check() throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
+        F = Integer.parseInt(st.nextToken());
+        S = Integer.parseInt(st.nextToken());
+        T = Integer.parseInt(st.nextToken());
 
-        pq.add(new int[]{start, 0});
+        adjList = new ArrayList[N];
+        for (int i = 0; i < N; i++)
+            adjList[i] = new ArrayList<>();
+
+        for (int i = 0; i < M + F; i++) {
+            st = new StringTokenizer(br.readLine());
+            int from = Integer.parseInt(st.nextToken());
+            int to = Integer.parseInt(st.nextToken());
+            if (i < M) {
+                long weight = Long.parseLong(st.nextToken());
+                adjList[from].add(new Pair(to, weight));
+                adjList[to].add(new Pair(from, weight));
+            } else {
+                adjList[from].add(new Pair(to, 0));
+            }
+        }
+        long ans = dijkstra2(S, T);
+        System.out.println(ans);
+    }
+
+    long dijkstra2(int start, int dest) {
+        long[][] distance = new long[N][2];
+        long res = 0;
+        for (int i = 0; i < N; i++)
+            Arrays.fill(distance[i], Long.MAX_VALUE);
+
+        PriorityQueue<Pair> pq = new PriorityQueue<>();
+
+        distance[start][1] = 0;
+        pq.add(new Pair(start, 0, 1));
+        while (!pq.isEmpty()) {
+            Pair cur = pq.poll();
+
+            if (cur.weight > distance[cur.num][cur.available]) continue;
+            distance[cur.num][cur.available] = cur.weight;
+            if (cur.num == dest) {
+                res = cur.weight;
+                break;
+            }
+
+            for (Pair next : adjList[cur.num]) {
+                if (cur.available == 1) { // have ticket.
+                    if (next.weight == 0) { // air road available
+                        if (cur.weight < distance[next.num][0]) {
+                            distance[next.num][0] = cur.weight;
+                            pq.add(new Pair(next.num, distance[next.num][0], 0));
+                        }
+                    }
+                    if (next.weight != 0) { // just traffic
+                        if (cur.weight+next.weight < distance[next.num][cur.available]) {
+                            distance[next.num][cur.available] = cur.weight+next.weight;
+                            pq.add(new Pair(next.num, distance[next.num][cur.available], cur.available));
+                        }
+                    }
+                } else { // the rests are just road
+                    if (cur.weight+next.weight < distance[next.num][cur.available]) {
+                        distance[next.num][cur.available] = cur.weight+next.weight;
+                        pq.add(new Pair(next.num, distance[next.num][1], cur.available));
+                    }
+                }
+            }
+        }
+        return res;
+    }
+
+    long dijkstra(int start, int dest) {
+        long[] distance = new long[N];
+        Arrays.fill(distance, Long.MAX_VALUE);
+        PriorityQueue<Pair> pq = new PriorityQueue<>();
+
+        pq.add(new Pair(start, 0));
         distance[start] = 0;
         while (!pq.isEmpty()) {
-            int[] cur = pq.poll();
+            Pair cur = pq.poll();
 
-            if (cur[1] > distance[cur[0]]) continue;
-            if (cur[0] == dest) break;
+            if (cur.weight > distance[cur.num]) continue;
+            if (cur.num == dest) break;
 
-            for (int[] next : adjList[cur[0]]) {
-                int nextPath = next[1] + distance[cur[0]];
-                if (distance[next[0]] > nextPath) {
-                    distance[next[0]] = nextPath;
-                    pq.add(new int[]{next[0], nextPath});
+            for (Pair next : adjList[cur.num]) {
+                long nextPath = next.weight + distance[cur.num];
+                if (distance[next.num] > nextPath) {
+                    distance[next.num] = nextPath;
+                    pq.add(new Pair(next.num, nextPath));
                 }
             }
         }
-        return distance;
+        return distance[dest];
     }
 }
 
-class InputReader {
-    private InputStream stream;
-    private byte[] buf = new byte[1024];
-    private int curChar;
-    private int numChars;
+class Pair implements Comparable<Pair> {
+    int num;
+    long weight;
+    int available;
 
-    public int read() {
-        if (numChars == -1) {
-            throw new InputMismatchException();
+    Pair(int num, long weight) {
+        this.num = num;
+        this.weight = weight;
+    }
+
+    Pair(int num, long weight, int available) {
+        this.num = num;
+        this.weight = weight;
+        this.available = available;
+    }
+
+    @Override
+    public int compareTo(Pair o) {
+        if (this.weight - o.weight < 0) {
+            return -1;
+        } else if (this.weight - o.weight > 0) {
+            return 1;
         } else {
-            if (curChar >= numChars) {
-                curChar = 0;
-                try {
-                    numChars = stream.read(buf);
-                } catch (IOException var2) {
-                    throw new InputMismatchException();
-                }
-                if (numChars <= 0) {
-                    return -1;
-                }
-            }
-            return buf[curChar++];
+            return 0;
         }
-    }
-
-    public boolean isSpaceChar(int c) {
-        return c == 32 || c == 10 || c == 13 || c == 9 || c == -1;
-    }
-
-    public InputReader(InputStream stream) {
-        this.stream = stream;
-    }
-
-    public String next() {
-        int c = this.read();
-        while (isSpaceChar(c)) {
-            c = this.read();
-        }
-        StringBuilder result = new StringBuilder();
-        result.appendCodePoint(c);
-        while (!isSpaceChar(c = this.read())) {
-            result.appendCodePoint(c);
-        }
-        return result.toString();
-    }
-
-    public int nextInt() {
-        int c = this.read();
-        while (isSpaceChar(c)) {
-            c = this.read();
-        }
-        byte sgn = 1;
-        if (c == 45) {
-            sgn = -1;
-            c = this.read();
-        }
-        int res = 0;
-        while (c >= 48 && c <= 57) {
-            res *= 10;
-            res += c - 48;
-            c = this.read();
-            if (isSpaceChar(c)) {
-                return res * sgn;
-            }
-        }
-        throw new InputMismatchException();
-    }
-
-    public String[] nextArray(int size) {
-        String[] ret = new String[size];
-        for (int i = 0; i < size; i++) {
-            ret[i] = this.next();
-        }
-        return ret;
-    }
-
-    public int[] nextIntArray(int size) {
-        int[] ret = new int[size];
-        for (int i = 0; i < size; i++) {
-            ret[i] = this.nextInt();
-        }
-        return ret;
-    }
-}
-
-class OutputWriter {
-    private final PrintWriter writer;
-
-    public OutputWriter(OutputStream outputStream) {
-        writer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(outputStream)));
-    }
-
-    public OutputWriter(Writer writer) {
-        this.writer = new PrintWriter(writer);
-    }
-
-    public void print(int i) {
-        writer.print(i);
-    }
-
-    public void print(long i) {
-        writer.print(i);
-    }
-
-    public void print(Object... objects) {
-        int len = objects.length;
-        for (int i = 0; i < len; i++) {
-            if (i != 0) {
-                writer.print(' ');
-            }
-            writer.print(objects[i]);
-        }
-    }
-
-    public void println() {
-        writer.println();
-    }
-
-    public void close() {
-        writer.close();
     }
 }
