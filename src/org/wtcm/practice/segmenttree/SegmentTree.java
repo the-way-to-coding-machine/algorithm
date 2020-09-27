@@ -22,7 +22,7 @@ public class SegmentTree {
         return init(current*2, start, mid) + init(current*2+1, mid+1, end);
     }
 
-    public void update(int srcIndex, int desValue) {
+    public void update(int srcIndex, int desValue) { // srcIndex에 위치한 숫자를 desValue로 갱신.
         int diff = desValue - originArr[srcIndex];
         originArr[srcIndex] = desValue;
         update(srcIndex, diff, 1, 1, arrSize);
@@ -39,6 +39,10 @@ public class SegmentTree {
             update(changedIndex, diff, current*2, left, mid);
             update(changedIndex, diff, current*2+1, mid+1, right);
         }
+    }
+
+    public int prefixSum(int start, int end) {
+        return rangeSum(1, start, end, 1, arrSize);
     }
 
     private int rangeSum(int current, int targetRangeStart, int targetRangeEnd, int left, int right){
