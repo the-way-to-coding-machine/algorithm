@@ -95,7 +95,7 @@ class Task {
             Pair cur = pq.poll();
 
             if (cur.weight > distance[cur.num][cur.available]) continue;
-            distance[cur.num][cur.available] = cur.weight;
+
             if (cur.num == dest) {
                 res = cur.weight;
                 break;
@@ -118,7 +118,7 @@ class Task {
                 } else { // the rests are just road
                     if (cur.weight+next.weight < distance[next.num][cur.available]) {
                         distance[next.num][cur.available] = cur.weight+next.weight;
-                        pq.add(new Pair(next.num, distance[next.num][1], cur.available));
+                        pq.add(new Pair(next.num, distance[next.num][cur.available], cur.available));
                     }
                 }
             }
