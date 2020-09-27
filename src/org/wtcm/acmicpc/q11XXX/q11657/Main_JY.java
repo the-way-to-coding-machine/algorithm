@@ -2,6 +2,7 @@ package org.wtcm.acmicpc.q11XXX.q11657;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.InputMismatchException;
 
 public class Main_JY {
@@ -18,32 +19,39 @@ public class Main_JY {
 class Task {
     int N, M;
     ArrayList<int[]>[] adjList;
-    int[] distance;
-    public void solution(InputReader in, OutputWriter out) {
-        N = in.nextInt();
-        M = in.nextInt();
+    long[] distance;
 
-        adjList = new ArrayList[N+1];
-        for (int i = 0; i < N + 1; i++)
+    public void solution(InputReader in, OutputWriter out) {
+        int[] first = in.nextIntArray(2);
+        N = first[0];
+        M = first[1];
+
+        adjList = new ArrayList[N + 1];
+        for (int i = 1; i <= N; i++)
             adjList[i] = new ArrayList<>();
+
+        distance = new long[N + 1];
+        Arrays.fill(distance, Long.MAX_VALUE);
 
         for (int i = 0; i < M; i++) {
             int[] input = in.nextIntArray(3);
             adjList[input[0]].add(new int[]{input[1], input[2]});
         }
-
-        for (int i = 0; i < M; i++) {
-            int[] tmp = in.nextIntArray(3);
-        }
-
         distance[1] = 0;
-
-        for (int prev = 1; prev <= N; prev++) {
-            for (int cur = 1; cur <= N; cur++) {
-
+        for (int from = 1; from <= N - 1; from++) {
+            for (int to = 1; to <= N; to++) {
+                for (int[] next : adjList[to]) {
+                    if (distance[to] != Integer.MAX_VALUE && distance[next[0]] > distance[to] + next[1]) {
+                        distance[next[0]] = distance[to] + next[1];
+                    }
+                }
             }
         }
-        out.print(distance[N]);
+        for (int i = 2; i <= N; i++) {
+            out.print(distance[i] == Long.MAX_VALUE ? -1 : distance[i]);
+            out.println();
+        }
+
     }
 }
 
