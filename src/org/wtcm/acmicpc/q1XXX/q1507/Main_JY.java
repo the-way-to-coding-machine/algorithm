@@ -34,7 +34,7 @@ class Task {
             for (int j = 1; j <= N; j++)
                 distance[i][j] = in.nextInt();
 
-        if (!floydwarshal()) {
+        if (!floydwarshall()) {
             out.print(-1);
             return;
         }
@@ -48,10 +48,11 @@ class Task {
         out.print(res>>1);
     }
 
-    boolean floydwarshal() {
+    boolean floydwarshall() {
         for (int via = 1; via <= N; via++) {
             for (int start = 1; start <= N; start++) {
                 for (int end = 1; end <= N; end++) {
+                    // note. 이 조건문의 의미를 제대로 다시 이해하자. 지금은 잘 모른다...
                     if (start == end || start == via || end == via) continue;
 
                     else if(distance[start][end] > distance[start][via] + distance[via][end])
