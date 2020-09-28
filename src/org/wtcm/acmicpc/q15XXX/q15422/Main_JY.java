@@ -77,8 +77,55 @@ class Task {
                 adjList[from].add(new Pair(to, 0));
             }
         }
-        long ans = dijkstra2(S, T);
+        long ans = dijkstra3(S, T);
         System.out.println(ans);
+    }
+
+    long dijkstra3(int start, int dest) {
+        long[][] distance = new long[N][2];
+        long res = 0;
+        for (int i = 0; i < N; i++)
+            Arrays.fill(distance[i], Long.MAX_VALUE);
+
+        PriorityQueue<Pair> pq = new PriorityQueue<>();
+
+        distance[start][1] = 0;
+        pq.add(new Pair(start, 0, 1));
+
+        while (!pq.isEmpty()) {
+            Pair cur = pq.poll();
+
+            if (distance[cur.num][cur.available] < cur.weight) continue;
+            if (cur.num == dest) {
+                res = cur.weight;
+                break;
+            }
+
+            if (cur.available == 1) { // 1 ticket available
+                for (Pair next : adjList[cur.num]) {
+                    long newLength = cur.weight + next.weight;
+                    if (next.weight == 0) { // air road
+                        distance[next.num][cur.available - 1] = newLength;
+                        pq.add(new Pair(next.num, newLength, cur.available-1));
+                    } else { // traffic road
+                        if (distance[next.num][cur.available] > newLength) {
+                            distance[next.num][cur.available] = newLength;
+                            pq.add(new Pair(next.num, newLength, cur.available));
+                        }
+                    }
+                }
+            } else { // no ticket available
+                for (Pair next : adjList[cur.num]) {
+                    if (next.weight == 0) continue;
+                    long newLength = cur.weight + next.weight;
+                    if (distance[next.num][cur.available] > newLength) {
+                        distance[next.num][cur.available] = newLength;
+                        pq.add(new Pair(next.num, newLength, cur.available));
+                    }
+                }
+            }
+        }
+        return res;
     }
 
     long dijkstra2(int start, int dest) {
@@ -110,14 +157,14 @@ class Task {
                         }
                     }
                     if (next.weight != 0) { // just traffic
-                        if (cur.weight+next.weight < distance[next.num][cur.available]) {
-                            distance[next.num][cur.available] = cur.weight+next.weight;
+                        if (cur.weight + next.weight < distance[next.num][cur.available]) {
+                            distance[next.num][cur.available] = cur.weight + next.weight;
                             pq.add(new Pair(next.num, distance[next.num][cur.available], cur.available));
                         }
                     }
                 } else { // the rests are just road
-                    if (cur.weight+next.weight < distance[next.num][cur.available]) {
-                        distance[next.num][cur.available] = cur.weight+next.weight;
+                    if (cur.weight + next.weight < distance[next.num][cur.available]) {
+                        distance[next.num][cur.available] = cur.weight + next.weight;
                         pq.add(new Pair(next.num, distance[next.num][cur.available], cur.available));
                     }
                 }
