@@ -14,9 +14,57 @@ public class Main_JY {
     }
 }
 
+/*
+* note.
+*  처음에 문제 이해를 잘 못했다.
+*  input으로 주어진 각 node간 weight들은 그 node들을 직접 잇는 경로가 아니다.(아닐수도 있다)
+*  그냥 weight만 가지고 경로를 찾아내야한다.
+* */
+
 class Task {
-    
+    int N;
+    int[][] distance;
+    boolean[][] remove;
     void solution(InputReader in, OutputWriter out) {
+        N = in.nextInt();
+        distance = new int[N+1][N+1];
+        remove = new boolean[N+1][N+1];
+
+        for (int i = 1; i <= N; i++)
+            for (int j = 1; j <= N; j++)
+                distance[i][j] = in.nextInt();
+
+        if (!floydwarshal()) {
+            out.print(-1);
+            return;
+        }
+
+        int res = 0;
+        for (int i = 1; i <= N; i++)
+            for (int j = 1; j <= N; j++)
+                if (!remove[i][j])
+                    res += distance[i][j];
+
+        out.print(res>>1);
+    }
+
+    boolean floydwarshal() {
+        for (int via = 1; via <= N; via++) {
+            for (int start = 1; start <= N; start++) {
+                for (int end = 1; end <= N; end++) {
+                    if (start == end || start == via || end == via) continue;
+
+                    else if(distance[start][end] > distance[start][via] + distance[via][end])
+                        return false;
+
+                    else if (distance[start][end] == distance[start][via] + distance[via][end]) {
+                        remove[start][end] = true;
+                        remove[end][start] = true;
+                    }
+                }
+            }
+        }
+        return true;
     }
 }
 
