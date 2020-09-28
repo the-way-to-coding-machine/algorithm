@@ -16,10 +16,14 @@ public class Main_JY {
     }
 }
 
+
+/* note. 벌써 여러번 overflow나 underflow때문에 여러번 실패했다. 이런거 계산도 연습 해야한다.
+* */
 class Task {
     int N, M;
     ArrayList<int[]>[] adjList;
     long[] distance;
+    boolean cycle = false;
 
     public void solution(InputReader in, OutputWriter out) {
         int[] first = in.nextIntArray(2);
@@ -30,28 +34,35 @@ class Task {
         for (int i = 1; i <= N; i++)
             adjList[i] = new ArrayList<>();
 
-        distance = new long[N + 1];
-        Arrays.fill(distance, Long.MAX_VALUE);
-
         for (int i = 0; i < M; i++) {
             int[] input = in.nextIntArray(3);
             adjList[input[0]].add(new int[]{input[1], input[2]});
         }
+
+        distance = new long[N + 1];
+        Arrays.fill(distance, Long.MAX_VALUE);
         distance[1] = 0;
-        for (int from = 1; from <= N - 1; from++) {
-            for (int to = 1; to <= N; to++) {
-                for (int[] next : adjList[to]) {
-                    if (distance[to] != Integer.MAX_VALUE && distance[next[0]] > distance[to] + next[1]) {
-                        distance[next[0]] = distance[to] + next[1];
+        for (int i = 1; i <= N; i++) { // n개의 vertex를 방문하는데 n개 이상의 edge를 지난다는건 cycle이 있다는 이야기.
+            for (int cur = 1; cur <= N; cur++) {
+                for (int[] next : adjList[cur]) {
+                    if (distance[cur] != Long.MAX_VALUE && distance[next[0]] > distance[cur] + next[1]) {
+                        distance[next[0]] = distance[cur] + next[1];
+                        if (i == N) { // n번째인데 갱신이 됐다? --> 음수 사이클
+                            cycle = true;
+                            break;
+                        }
                     }
                 }
             }
         }
-        for (int i = 2; i <= N; i++) {
-            out.print(distance[i] == Long.MAX_VALUE ? -1 : distance[i]);
-            out.println();
-        }
 
+        if (cycle) out.print(-1);
+        else {
+            for (int i = 2; i <= N; i++) {
+                out.print(distance[i] == Long.MAX_VALUE ? -1 : distance[i]); // 여기서 -1은 길이 없단뜻이다. 음의 사이클이 아니라.
+                out.println();
+            }
+        }
     }
 }
 
