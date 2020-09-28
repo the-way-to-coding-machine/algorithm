@@ -15,8 +15,39 @@ public class Main_JY {
 }
 
 class Task {
-
+    int N,M;
+    int[][] adjMatrix;
     void solution(InputReader in, OutputWriter out) {
+        int[] first = in.nextIntArray(2);
+        N = first[0];   M = first[1];
+        adjMatrix = new int[N+1][N+1];
+        for (int i = 0; i < N + 1; i++)
+            for (int j = 0; j < N + 1; j++)
+                if (i != j) adjMatrix[i][j] = 200001;
+
+        for (int i = 0; i < M; i++) {
+            int[] input = in.nextIntArray(2);
+            adjMatrix[input[0]][input[1]] = 1;
+        }
+        // 모순되는게 없다 --> cycle이 없다.
+        for (int via = 1; via <= N; via++) {
+            for (int start = 1; start <= N; start++) {
+                for (int end = 1; end <= N; end++) {
+                    if (adjMatrix[start][end] > adjMatrix[start][via] + adjMatrix[via][end]) {
+                        adjMatrix[start][end] = adjMatrix[start][via] + adjMatrix[via][end];
+                    }
+                }
+            }
+        }
+        for (int from = 1; from <= N; from++) {
+            int cnt = 0;
+            for (int to = 1; to <= N; to++) {
+                if (from == to) continue;
+                if (adjMatrix[from][to] >= 200001 && adjMatrix[to][from] >= 200001)   cnt++;
+            }
+            out.print(cnt);
+            out.println();
+        }
     }
 }
 
