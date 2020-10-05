@@ -15,8 +15,45 @@ public class Main_JY {
 }
 
 class Task {
-    
+    int N, M, K;
+    int[][] map;
+    final int INF = 987654321;
+
     void solution(InputReader in, OutputWriter out) {
+        int[] first = in.nextIntArray(2);
+        N = first[0];
+        M = first[1];
+
+        map = new int[N + 1][N + 1];
+        for (int i = 0; i < N + 1; i++)
+            for (int j = 0; j < N + 1; j++)
+                if (i != j) map[i][j] = INF;
+
+        for (int i = 0; i < M; i++) {
+            int[] input = in.nextIntArray(3);
+            map[input[0]][input[1]] = 0;
+            map[input[1]][input[0]] = input[2] == 0 ? 1 : 0;
+        }
+        floydWarshall();
+
+        K = in.nextInt();
+        for (int i = 0; i < K; i++) {
+            int[] input = in.nextIntArray(2);
+            out.print(map[input[0]][input[1]]);
+            out.println();
+        }
+    }
+
+    void floydWarshall() {
+        for (int via = 1; via <= N; via++) {
+            for (int start = 1; start <= N; start++) {
+                for (int end = 1; end <= N; end++) {
+                    if (map[start][end] > map[start][via] + map[via][end]) {
+                        map[start][end] = map[start][via] + map[via][end];
+                    }
+                }
+            }
+        }
     }
 }
 
