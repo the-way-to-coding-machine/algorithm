@@ -15,8 +15,46 @@ public class Main_JY {
 }
 
 class Task {
-    
+    int N, M;
+    int[][] adjMatrix;
+    final int INF = 1000000000;
+
     void solution(InputReader in, OutputWriter out) {
+        int[] first = in.nextIntArray(2);
+        N = first[0];
+        M = first[1];
+        adjMatrix = new int[N + 1][N + 1];
+
+        for (int i = 0; i < N + 1; i++)
+            for (int j = 0; j < N + 1; j++)
+                if (i != j) adjMatrix[i][j] = INF;
+
+        for (int i = 0; i < M; i++) {
+            int[] input = in.nextIntArray(3);
+            adjMatrix[input[0]][input[1]] = input[2];
+        }
+
+        for (int via = 1; via <= N; via++) {
+            for (int start = 1; start <= N; start++) {
+                for (int end = 1; end <= N; end++) {
+                    if (adjMatrix[start][end] > adjMatrix[start][via] + adjMatrix[via][end]) {
+                        adjMatrix[start][end] = adjMatrix[start][via] + adjMatrix[via][end];
+                    }
+                }
+            }
+        }
+
+        int min = INF;
+        for (int i = 1; i <= N; i++) {
+            for (int j = 1; j <= N; j++) {
+                if (i == j) continue;
+                int cur = adjMatrix[i][j] + adjMatrix[j][i];
+                if (cur >= INF) continue;
+                if (min > cur) min = cur;
+            }
+        }
+        if (min >= INF) out.print(-1);
+        else out.print(min);
     }
 }
 
