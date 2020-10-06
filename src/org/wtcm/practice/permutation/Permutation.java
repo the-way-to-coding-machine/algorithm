@@ -67,7 +67,7 @@ public class Permutation {
 
         for (int idx = 0; idx < total; idx++) {
             result.add(originArr[idx]);
-            innerDuplicateLineUp(result,total,toPick);
+            innerDuplicateLineUp(result, total, toPick);
             result.removeLast();
         }
     }
@@ -75,12 +75,13 @@ public class Permutation {
     int[][] cache;
     public int dpPermutation(int n, int r) {
         cache = new int[n][n];
-        return innerDpPermutation(n,r);
+        return innerDpPermutation(n, r);
     }
 
     private int innerDpPermutation(int n, int r) {
-        if ()
-
+        if (cache[n][r] != 0) return cache[n][r];
+        if (r == 0) return 1;
+        return cache[n][r] = n * innerDpPermutation(n - 1, r - 1);
     }
 
 }
