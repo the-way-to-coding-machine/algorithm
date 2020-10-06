@@ -79,4 +79,19 @@ public class Combination {
         combination(resultArray, total, toPick-1, pickIdx+1, arrIdx+1);
         combination(resultArray, total, toPick, pickIdx, arrIdx+1);
     }
+
+    int[][] cache;
+    public int dpCombination(int n, int r) {
+        // 경우의 수만 구할 수 있음 실제 조합 X
+        cache = new int[n][n];
+        return innerDpCombination(n,r);
+    }
+
+    private int innerDpCombination(int n, int r) {
+        if (cache[n][r] != 0) return cache[n][r];
+        if (n == r || r == 0) return 1;
+        else {
+            return cache[n][r] = innerDpCombination(n-1, r-1) + innerDpCombination(n-1, r);
+        }
+    }
 }

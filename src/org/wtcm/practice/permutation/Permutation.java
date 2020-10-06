@@ -72,5 +72,15 @@ public class Permutation {
         }
     }
 
+    int[][] cache;
+    public int dpPermutation(int n, int r) {
+        cache = new int[n][n];
+        return innerDpPermutation(n,r);
+    }
+
+    private int innerDpPermutation(int n, int r) {
+        if ()
+
+    }
 
 }
