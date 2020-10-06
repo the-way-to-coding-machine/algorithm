@@ -1,6 +1,7 @@
 package org.wtcm.acmicpc.q2XXX.q2407;
 
 import java.io.*;
+import java.math.BigInteger;
 import java.util.InputMismatchException;
 
 public class Main_JY {
@@ -15,8 +16,30 @@ public class Main_JY {
 }
 
 class Task {
+    int N,M;
+    long[][] cache;
     void solution(InputReader in, OutputWriter out) {
+        int[] input = in.nextIntArray(2);
+        N = input[0];   M = input[1];
 
+        cache = new long[N+1][M+1];
+        BigInteger
+
+        cache[1][1] = cache[0][0] = cache[1][0] = 1;
+        for (int n = 2; n <= N; n++) {
+            for (int r = 0; r <= M; r++) {
+                if (n == r || r == 0) cache[n][r] = 1;
+                else cache[n][r] = cache[n-1][r-1] + cache[n-1][r];
+            }
+        }
+        
+        out.print(cache[N][M]);
+    }
+
+    long c(int n, int r) {
+        if (cache[n][r] != 0) return cache[n][r];
+        if (n == r || r == 0) return 1;
+        return cache[n][r] = c(n-1, r-1) + c(n-1, r);
     }
 }
 
