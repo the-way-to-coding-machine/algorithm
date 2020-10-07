@@ -5,41 +5,50 @@ import java.math.BigInteger;
 import java.util.InputMismatchException;
 
 public class Main_JY {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
 
         Task question = new Task();
-        question.solution(in, out);
+//        question.solution(in, out);
+        question.convention(in, out);
         out.close();
     }
 }
 
 class Task {
     int N,M;
-    long[][] cache;
     void solution(InputReader in, OutputWriter out) {
         int[] input = in.nextIntArray(2);
         N = input[0];   M = input[1];
 
-        cache = new long[N+1][M+1];
-        BigInteger
+        BigInteger first = BigInteger.ONE;
+        BigInteger second = BigInteger.ONE;
 
-        cache[1][1] = cache[0][0] = cache[1][0] = 1;
-        for (int n = 2; n <= N; n++) {
-            for (int r = 0; r <= M; r++) {
-                if (n == r || r == 0) cache[n][r] = 1;
-                else cache[n][r] = cache[n-1][r-1] + cache[n-1][r];
-            }
+        // note. nCr --> n!/(n-r)!*r!
+        for (int i = 0; i < M; i++) {
+            first = first.multiply(new BigInteger(String.valueOf(N-i)));
+            second = second.multiply(new BigInteger(String.valueOf(i+1)));
         }
-        
-        out.print(cache[N][M]);
+
+        BigInteger ans = first.divide(second);
+        out.print(ans);
     }
 
-    long c(int n, int r) {
-        if (cache[n][r] != 0) return cache[n][r];
-        if (n == r || r == 0) return 1;
-        return cache[n][r] = c(n-1, r-1) + c(n-1, r);
+    void convention(InputReader in, OutputWriter out) {
+        int[] input = in.nextIntArray(2);
+        N = input[0];   M = input[1];
+
+        BigInteger[][] cache = new BigInteger[N+1][N+1];
+        cache[1][1] = BigInteger.ONE;
+        cache[1][0] = BigInteger.ONE;
+        for (int n = 2; n <= N; n++) {
+            for (int r = 0; r <= n; r++) {
+                if (n == r || r == 0) cache[n][r] = BigInteger.ONE;
+                else cache[n][r] = cache[n-1][r-1].add(cache[n-1][r]);
+            }
+        }
+        out.print(cache[N][M]);
     }
 }
 
@@ -141,6 +150,10 @@ class OutputWriter {
 
     public void print(int i) {
         writer.print(i);
+    }
+
+    public void print(Object object) {
+        writer.print(object);
     }
 
     public void print(long i) {
