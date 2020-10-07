@@ -1,6 +1,7 @@
 package org.wtcm.acmicpc.q1XXX.q1010;
 
 import java.io.*;
+import java.math.BigInteger;
 import java.util.InputMismatchException;
 
 public class Main_JY {
@@ -15,8 +16,19 @@ public class Main_JY {
 }
 
 class Task {
+    int N;
     void solution(InputReader in, OutputWriter out) {
+        N = in.nextInt();
 
+        for (int i = 0; i < N; i++) {
+            int[] input = in.nextIntArray(2);
+            BigInteger upper = BigInteger.ONE;  BigInteger lower = BigInteger.ONE;
+            for (int j = 0; j < input[0]; j++) { // note. 이렇게하면 메모리는 좀 덜 쓰지만 숫자가 커진다 (팩토리얼을 계산하기 때문)
+                upper = upper.multiply(new BigInteger(String.valueOf(input[1]-j)));
+                lower = lower.multiply(BigInteger.valueOf(j+1));
+            }
+             out.print(upper.divide(lower));
+        }
     }
 }
 
@@ -120,8 +132,9 @@ class OutputWriter {
         writer.print(i);
     }
 
-    public void print(long i) {
+    public void print(Object i) {
         writer.print(i);
+        writer.println();
     }
 
     public void println(Object... objects) {
