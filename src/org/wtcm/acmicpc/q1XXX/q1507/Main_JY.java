@@ -55,9 +55,11 @@ class Task {
                     // note. 이 조건문의 의미를 제대로 다시 이해하자. 지금은 잘 모른다...
                     if (start == end || start == via || end == via) continue;
 
+                    // 이미 최솟값을 구해놨댔는데 다른길로 돌아가는게 더 빠른건 말이 안됨.
                     else if(distance[start][end] > distance[start][via] + distance[via][end])
                         return false;
 
+                    // 다른길로 돌아갈 때에 최솟값이 나오면 완빵에 가는걸 없앤다.. 근데 그게 왜 더 최소???
                     else if (distance[start][end] == distance[start][via] + distance[via][end]) {
                         remove[start][end] = true;
                         remove[end][start] = true;

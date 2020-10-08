@@ -42,7 +42,9 @@ class Task {
         distance = new long[N + 1];
         Arrays.fill(distance, Long.MAX_VALUE);
         distance[1] = 0;
-        for (int i = 1; i <= N; i++) { // n개의 vertex를 방문하는데 n개 이상의 edge를 지난다는건 cycle이 있다는 이야기.
+        // n개의 vertex를 방문하는데 n개 '이상'의 edge를 지난다는건 cycle이 있다는 이야기.
+        // 가장 바깥의 i loop는 edge의 갯수를 의미한다.
+        for (int i = 1; i <= N; i++) {
             for (int cur = 1; cur <= N; cur++) {
                 for (int[] next : adjList[cur]) {
                     if (distance[cur] != Long.MAX_VALUE && distance[next[0]] > distance[cur] + next[1]) {

@@ -15,8 +15,19 @@ public class Main_JY {
 }
 
 class Task {
+    int N,L,I;
     void solution(InputReader in, OutputWriter out) {
+        int[] input = in.nextIntArray(3);
+        N = input[0]; L = input[1]; I = input[2];
 
+        int[][]c = new int[N+1][N+1];
+        c[0][0] = c[1][0] = c[1][1] = 1;
+        for (int n = 1; n <= N; n++) {
+            for (int r = 0; r <= L; r++) {
+                if (n ==r || r == 0) c[n][r] = 1;
+                else c[n][r] = c[n-1][r-1] + c[n-1][r];
+            }
+        }
     }
 }
 

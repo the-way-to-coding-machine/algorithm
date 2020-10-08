@@ -45,7 +45,7 @@ public class Q5 {
             logArr.add(new TimeRange(new Time(tmp[0]), new Time(tmp[1])));
         }
 
-
+        return null;
     }
 
 }
