@@ -13,40 +13,46 @@ import java.util.Arrays;
 * */
 
 public class Q2 {
-    static int n = 1;
-
-    static int[][] square;
-
     public static void main(String[] args) {
-        square = new int[n][n];
-        int[] answer = new int[(n * (n + 1)) >> 1];
+        Arrays.stream(new Task().solution()).forEach(System.out::println);
+    }
 
-        int num = 0;
-        int count = n;
-        int row = 0, col = 0;
-        for (int line = 1; line <= n; line++) {
-            if (line % 3 == 1) {
-                for (int i = 0; i < count; i++)
-                    square[row++][col] = ++num;
-                row--;
-            } else if (line % 3 == 2) {
-                for (int i = 0; i < count; i++)
-                    square[row][++col] = ++num;
-                col--;
-            } else {
-                for (int i = 0; i < count; i++)
-                    square[--row][col--] = ++num;
-                row++; col++;
+    private static class Task {
+        int n = 1;
+        int[][] square;
+
+        int[] solution () {
+            square = new int[n][n];
+            int[] answer = new int[(n * (n + 1)) >> 1];
+
+            int num = 0;
+            int count = n;
+            int row = 0, col = 0;
+            for (int line = 1; line <= n; line++) {
+                if (line % 3 == 1) {
+                    for (int i = 0; i < count; i++)
+                        square[row++][col] = ++num;
+                    row--;
+                } else if (line % 3 == 2) {
+                    for (int i = 0; i < count; i++)
+                        square[row][++col] = ++num;
+                    col--;
+                } else {
+                    for (int i = 0; i < count; i++)
+                        square[--row][col--] = ++num;
+                    row++; col++;
+                }
+                count--;
             }
-            count--;
+
+            int idx = 0;
+            for (int i = 0; i < n; i++)
+                for (int j = 0; j < n; j++)
+                    if (square[i][j] != 0)
+                        answer[idx++] = square[i][j];
+
+            return answer;
         }
-
-        int idx = 0;
-        for (int i = 0; i < n; i++)
-            for (int j = 0; j < n; j++)
-                if (square[i][j] != 0)
-                    answer[idx++] = square[i][j];
-
-        Arrays.stream(answer).forEach(System.out::println);
     }
 }
+

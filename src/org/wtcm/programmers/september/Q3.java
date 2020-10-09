@@ -15,32 +15,38 @@ package org.wtcm.programmers.september;
 *
 * */
 public class Q3 {
-//        static int[] a = {9,-1,-5};
-    static int[] a = {-16, 27, 65, -2, 58, -92, -71, -68, -61, -33};
+    private static class Task {
+        //        static int[] a = {9,-1,-5};
+        static int[] a = {-16, 27, 65, -2, 58, -92, -71, -68, -61, -33};
+
+        int solution() {
+            // idea. i번째 숫자보다 작은 숫자가 양쪽에 있으면 못살아남음.
+            //       --> 나보다 작은 숫자가 한쪽에 몰려있으면 살 수있음..
+            int lMin = Integer.MAX_VALUE;
+            int rMin = Integer.MAX_VALUE;
+            int answer = 0;
+
+            int[] left = new int[a.length];
+            int[] right = new int[a.length];
+            for (int i = 0; i < a.length; i++) {
+                int j =a.length-1-i;
+                if (a[i] < lMin)
+                    lMin = a[i];
+                left[i] = lMin;
+                if (a[j] < rMin)
+                    rMin = a[j];
+                right[j] = rMin;
+            }
+
+            for (int cur = 0; cur < a.length; cur++) {
+                if ( left[cur] < a[cur] && right[cur] < a[cur]) continue;
+                answer++;
+            }
+            return answer;
+        }
+    }
 
     public static void main(String[] args) {
-        // idea. i번째 숫자보다 작은 숫자가 양쪽에 있으면 못살아남음.
-        //       --> 나보다 작은 숫자가 한쪽에 몰려있으면 살 수있음..
-        int lMin = Integer.MAX_VALUE;
-        int rMin = Integer.MAX_VALUE;
-        int answer = 0;
-
-        int[] left = new int[a.length];
-        int[] right = new int[a.length];
-        for (int i = 0; i < a.length; i++) {
-            int j =a.length-1-i;
-            if (a[i] < lMin)
-                lMin = a[i];
-            left[i] = lMin;
-            if (a[j] < rMin)
-                rMin = a[j];
-            right[j] = rMin;
-        }
-
-        for (int cur = 0; cur < a.length; cur++) {
-            if ( left[cur] < a[cur] && right[cur] < a[cur]) continue;
-            answer++;
-        }
-        System.out.println(answer);
+        System.out.println(new Task().solution());
     }
 }
