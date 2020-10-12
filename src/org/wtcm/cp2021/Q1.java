@@ -1,4 +1,4 @@
-package org.wtcm.coupang2021;
+package org.wtcm.cp2021;
 
 import java.util.Arrays;
 

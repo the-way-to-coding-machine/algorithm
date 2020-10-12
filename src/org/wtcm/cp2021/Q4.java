@@ -1,4 +1,4 @@
-package org.wtcm.coupang2021;
+package org.wtcm.cp2021;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,9 +22,7 @@ public class Q4 {
         String departure = "SEOUL";
         String hub = "DAEGU";
         String arrival = "YEOSU";
-        HashMap<String, Integer> cache1 = new HashMap<>();
-        HashMap<String, Integer> cache2 = new HashMap<>();
-
+        HashMap<String, Integer> cache = new HashMap<>();
         HashMap<String, List<String>> map = new HashMap<>();
         int solution() {
             for (int i = 0; i < roads.length; i++) {
@@ -41,47 +39,32 @@ public class Q4 {
                     map.put(from, tmp);
                 }
             }
-            int f = traverse1(departure);
+
+            int f = traverse(departure, hub);
             if (f == 0) return 0;
-            int s = traverse2(hub);
+            cache = new HashMap<>();
+            int s = traverse(hub, arrival);
             if (s == 0) return 0;
 
             return (f*s) % 10007;
         }
 
-        int traverse1(String cur) {
-            if (cur.equals(hub)) {
+        int traverse(String cur, String dest) {
+            if (cur.equals(dest)) {
                 return 1;
             }
 
-            if (cache1.get(cur) != null) return cache1.get(cur);
+            if (cache.get(cur) != null) return cache.get(cur);
 
             int cnt = 0;
             if(map.get(cur) != null) {
                 for (String next : map.get(cur)) {
-                    cnt += traverse1(next);
+                    cnt += traverse(next, dest);
                 }
             }
-            cache1.put(cur, cnt);
+            cache.put(cur, cnt);
 
-            return cache1.get(cur);
-        }
-
-        int traverse2(String cur) {
-            if (cur.equals(arrival)) {
-                return 1;
-            }
-            if (cache2.get(cur) != null) return cache2.get(cur);
-
-            int cnt = 0;
-            if (map.get(cur) != null) {
-                for (String next : map.get(cur)) {
-                    cnt += traverse2(next);
-                }
-            }
-            cache2.put(cur, cnt);
-
-            return cache2.get(cur);
+            return cache.get(cur);
         }
     }
 }
