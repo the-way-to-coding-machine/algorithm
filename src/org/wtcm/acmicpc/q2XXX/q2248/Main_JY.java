@@ -1,118 +1,61 @@
 package org.wtcm.acmicpc.q2XXX.q2248;
 
 import java.io.*;
-import java.util.InputMismatchException;
+import java.util.StringTokenizer;
 
 public class Main_JY {
-    public static void main(String[] args) {
-        InputReader in = new InputReader(System.in);
+    public static void main(String[] args) throws IOException {
         OutputWriter out = new OutputWriter(System.out);
 
         Task question = new Task();
-        question.solution(in, out);
+        question.solution(out);
         out.close();
     }
 }
 
 class Task {
-    int N,L,I;
-    void solution(InputReader in, OutputWriter out) {
-        int[] input = in.nextIntArray(3);
-        N = input[0]; L = input[1]; I = input[2];
+    int N, M;
+    long K;
+    long[][] cache;
+    StringBuilder answer = new StringBuilder();
 
-        int[][]c = new int[N+1][N+1];
-        c[0][0] = c[1][0] = c[1][1] = 1;
-        for (int n = 1; n <= N; n++) {
-            for (int r = 0; r <= L; r++) {
-                if (n ==r || r == 0) c[n][r] = 1;
-                else c[n][r] = c[n-1][r-1] + c[n-1][r];
+    void solution(OutputWriter out) throws IOException {
+        StringTokenizer st = new StringTokenizer(new BufferedReader(new InputStreamReader(System.in)).readLine());
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
+        K = Long.parseLong(st.nextToken());
+
+        cache = new long[N + 1][N + 1];
+        cache[0][0] = 1;
+        for (int i = 1; i <= N; i++) {
+            for (int j = 0; j <= i; j++) {
+                if (i == j || j == 0) cache[i][j] = 1;
+                else cache[i][j] = cache[i - 1][j - 1] + cache[i - 1][j];
             }
         }
+
+        findIthNumber(N, M, K);
+        out.print(answer.toString());
     }
-}
 
-class InputReader {
-    private InputStream stream;
-    private byte[] buf = new byte[1024];
-    private int curChar;
-    private int numChars;
+    private void findIthNumber(int n, int l, long k) {
+        if (n == 0) return;
+        if (l == 0) {
+            for (int i = 0; i < N; i++) answer.append("0");
+            return;
+        }
 
-    public int read() {
-        if (numChars == -1) {
-            throw new InputMismatchException();
+        long skip = 0;
+        for (int i = 0; i <= l; i++) {
+            skip += cache[n - 1][i]; // 맨 앞에 0을 넣고 만들 수 있는 경우의 수
+        }
+        if (skip >= k) { // skip >= k, skip이 더 크단건 뒷자리에서 l개의 1을 사용해서 k번째 숫자를 나타낼 수 있단거다.
+            answer.append("0"); // 그러니깐 현재 자리에는 0을 넣는다.
+            findIthNumber(n - 1, l, k);
         } else {
-            if (curChar >= numChars) {
-                curChar = 0;
-                try {
-                    numChars = stream.read(buf);
-                } catch (IOException var2) {
-                    throw new InputMismatchException();
-                }
-                if (numChars <= 0) {
-                    return -1;
-                }
-            }
-            return buf[curChar++];
+            answer.append("1"); // skip < k, skip이 더 작다는건 뒷자리에 l개의 0을 가지고 k번째 수를 못 만든다는거니깐 현재 자리까지 동원.
+            findIthNumber(n - 1, l - 1, k-skip);
         }
-    }
-
-    public boolean isSpaceChar(int c) {
-        return c == 32 || c == 10 || c == 13 || c == 9 || c == -1;
-    }
-
-    public InputReader(InputStream stream) {
-        this.stream = stream;
-    }
-
-    public String next() {
-        int c = this.read();
-        while (isSpaceChar(c)) {
-            c = this.read();
-        }
-        StringBuilder result = new StringBuilder();
-        result.appendCodePoint(c);
-        while (!isSpaceChar(c = this.read())) {
-            result.appendCodePoint(c);
-        }
-        return result.toString();
-    }
-
-    public int nextInt() {
-        int c = this.read();
-        while (isSpaceChar(c)) {
-            c = this.read();
-        }
-        byte sgn = 1;
-        if (c == 45) {
-            sgn = -1;
-            c = this.read();
-        }
-        int res = 0;
-        while (c >= 48 && c <= 57) {
-            res *= 10;
-            res += c - 48;
-            c = this.read();
-            if (isSpaceChar(c)) {
-                return res * sgn;
-            }
-        }
-        throw new InputMismatchException();
-    }
-
-    public String[] nextArray(int size) {
-        String[] ret = new String[size];
-        for (int i = 0; i < size; i++) {
-            ret[i] = this.next();
-        }
-        return ret;
-    }
-
-    public int[] nextIntArray(int size) {
-        int[] ret = new int[size];
-        for (int i = 0; i < size; i++) {
-            ret[i] = this.nextInt();
-        }
-        return ret;
     }
 }
 
@@ -135,7 +78,7 @@ class OutputWriter {
         writer.print(i);
     }
 
-    public void println(Object... objects) {
+    public void print(Object... objects) {
         int len = objects.length;
         for (int i = 0; i < len; i++) {
             if (i != 0) {
@@ -143,6 +86,9 @@ class OutputWriter {
             }
             writer.print(objects[i]);
         }
+    }
+
+    public void println() {
         writer.println();
     }
 
