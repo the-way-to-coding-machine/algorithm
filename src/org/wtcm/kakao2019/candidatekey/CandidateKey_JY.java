@@ -26,7 +26,6 @@ public class CandidateKey_JY {
         List<int[]> picked = new ArrayList<>();
 
         int solution(String[][] relation) {
-            int answer = 0;
             table = relation;
             rowNum = relation.length;
             colNum = relation[0].length;
@@ -81,6 +80,13 @@ public class CandidateKey_JY {
         boolean hasShorter(LinkedList<int[]> candidates, int[] cur) {
             for (int[] candidate : candidates) {
                 if (candidate.length >= cur.length) break;
+                int cnt = 0;
+                for (int canIdx = 0; canIdx < candidate.length; canIdx++) {
+                    for (int curIdx = 0; curIdx < cur.length; curIdx++) {
+                        if (candidate[canIdx] == cur[curIdx]) cnt++;
+                    }
+                }
+                if (cnt == candidate.length) return true;
             }
             return false;
         }
