@@ -4,65 +4,42 @@ package org.wtcm.nv2021;
 
  * */
 
-import java.util.Arrays;
-import java.util.LinkedList;
+import java.util.HashMap;
 
 public class Q3 {
-    static int[] numbers = {6, 2, 5, 5, 4, 5, 6, 3, 7, 6};
-    static int K;
-    static int answer;
 
     public static void main(String[] args) {
-        int k = 20; // 6,11,1;
-        solution(k);
+        int k = 11; // 6,11,1;
+        Task question = new Task();
+        System.out.println(question.solution(k));
     }
 
-    static void solution(int k) {
-        K = k;
-        for (int pick = 1; pick <= 9; pick++) {
-            if (K < 2 * pick) continue;
-//            int[] result = new int[pick];
-//            Arrays.fill(result, -1);
-//            combination(result, numbers, numbers.length, pick, 0, 0);
-            LinkedList<Integer> result = new LinkedList<>();
-            permutation(result, 10, pick);
+    private static class Task {
+        int[] numbers = {6, 2, 5, 5, 4, 5, 6, 3, 7, 6};
+        HashMap<Integer, Integer> cache = new HashMap<>();
+
+        int solution(int k) {
+            int result = recur(k, 1, 1);
+
+            return result;
         }
-        System.out.println(answer);
-    }
 
-    static void combination(int[] resultArray, int[] srcArray, int total, int toPick, int srcIdx, int resultIdx) {
-        if (toPick == 0) {
-            if (Arrays.stream(resultArray).sum() == K) {
-                int cnt = resultArray.length;
-                int tmp = 1;
-                while (cnt > 0) {
-                    tmp *= cnt--;
-                }
-                answer += tmp;
+        int recur(int remain, int currentNumber, int depth) {
+            if (cache.get(remain) != null) return cache.get(remain);
+
+            if (remain < 0) return 0;
+            else if (remain == 0) return 1;
+
+            int cnt = 0;
+            for (int nextNumber = 0; nextNumber <= 9; nextNumber++) {
+                if (depth == 1 && nextNumber == 0) continue;
+                cnt += recur(remain - numbers[nextNumber], nextNumber, depth+1);
             }
-            return;
-        }
+            cache.put(remain, cnt);
 
-        if (srcIdx >= total) return;
-        resultArray[resultIdx] = srcArray[srcIdx];
-
-        combination(resultArray, srcArray, total, toPick - 1, srcIdx, resultIdx + 1);
-        combination(resultArray, srcArray, total, toPick, srcIdx + 1, resultIdx);
-    }
-
-    static void permutation(LinkedList<Integer> resultList, int total, int toPick) {
-        if (resultList.size() == toPick) {
-            if (resultList.get(0) == 0 && toPick != 1) return;
-            int sum = 0;
-            for (int idx : resultList) sum += numbers[idx];
-            if (sum == K) answer++;
-            return;
-        }
-
-        for (int srcIdx = 0; srcIdx < total; srcIdx++) {
-            resultList.add(srcIdx);
-            permutation(resultList, total, toPick);
-            resultList.removeLast();
+            return cache.get(remain);
         }
     }
+
+
 }
