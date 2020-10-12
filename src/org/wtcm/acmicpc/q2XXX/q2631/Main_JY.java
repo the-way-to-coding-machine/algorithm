@@ -15,8 +15,40 @@ public class Main_JY {
 }
 
 class Task {
+    int N;
+    int[] kids;
+    int[] lis;
     void solution(InputReader in, OutputWriter out) {
+        N = in.nextInt();
+        kids = in.nextIntArray(N);
 
+        lis = new int[N+1];
+        lis[0] = Integer.MIN_VALUE;
+        int last = 0;
+        for (int i = 0; i < kids.length; i++) {
+            if (kids[i] > lis[last]) {
+                lis[++last] = kids[i];
+            } else {
+                int position = lowerBound(last, kids[i]);
+                lis[position] = kids[i];
+            }
+        }
+        out.print(N-last);
+    }
+
+    int lowerBound(int end, int target) {
+        int start = 0;
+
+        while (start < end) {
+            int mid = (start+end) >> 1;
+
+            if (lis[mid] < target) {
+                start = mid + 1;
+            } else {
+                end = mid;
+            }
+        }
+        return end;
     }
 }
 
