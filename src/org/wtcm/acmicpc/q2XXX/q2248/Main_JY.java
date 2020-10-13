@@ -40,10 +40,6 @@ class Task {
 
     private void findIthNumber(int n, int l, long k) {
         if (n == 0) return;
-//        if (l == 0) { // note. 이게 없으니까 맞았다.. 근데 이유를 모르겠다
-//            for (int i = 0; i < N; i++) answer.append("0");
-//            return;
-//        }
 
         long skip = 0;
         for (int i = 0; i <= l; i++) {
