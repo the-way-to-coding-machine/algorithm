@@ -16,11 +16,40 @@ public class Main_JY {
 
 class Task {
     int N, M, K;
+    int[][] cache;
+    StringBuilder answer = new StringBuilder();
+
     void solution(InputReader in, OutputWriter out) {
         int[] input = in.nextIntArray(3);
         N = input[0]; M = input[1]; K = input[2];
+        cache = new int[N + M + 1][N + M + 1];
+
+        cache[0][0] = 1;
+        for (int n = 1; n < N + M + 1; n++) {
+            for (int r = 0; r <= n; r++) {
+                if (n == r | r == 0) cache[n][r] = 1;
+                else cache[n][r] = cache[n - 1][r - 1] + cache[n - 1][r];
+            }
+        }
 
 
+        if (cache[N+M][M] < K) out.print(-1);
+        else {
+            findString(N + M, M, K); // 길이 N+M인 string에서 "z" 를 M개 이하로
+            out.print(answer.toString());
+        }
+    }
+
+    void findString(int N, int M, long K) {
+        if (N == 0) return;
+
+        if (cache[N][M] >= K) {
+            answer.append("a");
+            findString(N - 1, M, K);
+        } else {
+            answer.append("z");
+            findString(N - 1, M - 1, K - cache[N][M]);
+        }
     }
 }
 
@@ -128,7 +157,7 @@ class OutputWriter {
         writer.print(i);
     }
 
-    public void println(Object... objects) {
+    public void print(Object... objects) {
         int len = objects.length;
         for (int i = 0; i < len; i++) {
             if (i != 0) {
@@ -136,6 +165,9 @@ class OutputWriter {
             }
             writer.print(objects[i]);
         }
+    }
+
+    public void println() {
         writer.println();
     }
 
