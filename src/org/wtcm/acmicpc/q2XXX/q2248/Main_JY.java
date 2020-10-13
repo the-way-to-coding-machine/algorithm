@@ -27,10 +27,10 @@ class Task {
 
         cache = new long[N + 1][N + 1];
         cache[0][0] = 1;
-        for (int i = 1; i <= N; i++) {
-            for (int j = 0; j <= i; j++) {
-                if (i == j || j == 0) cache[i][j] = 1;
-                else cache[i][j] = cache[i - 1][j - 1] + cache[i - 1][j];
+        for (int n = 1; n <= N; n++) {
+            for (int r = 0; r <= n; r++) { // 이건 그냥 전체 자릿수에서 1을 몇개 쓸거냐 하는 조합이다 nCr
+                if (n == r || r == 0) cache[n][r] = 1;
+                else cache[n][r] = cache[n - 1][r - 1] + cache[n - 1][r];
             }
         }
 
@@ -40,10 +40,10 @@ class Task {
 
     private void findIthNumber(int n, int l, long k) {
         if (n == 0) return;
-        if (l == 0) {
-            for (int i = 0; i < N; i++) answer.append("0");
-            return;
-        }
+//        if (l == 0) { // note. 이게 없으니까 맞았다.. 근데 이유를 모르겠다
+//            for (int i = 0; i < N; i++) answer.append("0");
+//            return;
+//        }
 
         long skip = 0;
         for (int i = 0; i <= l; i++) {
@@ -54,7 +54,7 @@ class Task {
             findIthNumber(n - 1, l, k);
         } else {
             answer.append("1"); // skip < k, skip이 더 작다는건 뒷자리에 l개의 0을 가지고 k번째 수를 못 만든다는거니깐 현재 자리까지 동원.
-            findIthNumber(n - 1, l - 1, k-skip);
+            findIthNumber(n - 1, l - 1, k - skip);
         }
     }
 }
