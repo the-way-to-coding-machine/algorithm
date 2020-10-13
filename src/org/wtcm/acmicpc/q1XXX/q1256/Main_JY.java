@@ -28,10 +28,9 @@ class Task {
         for (int n = 1; n < N + M + 1; n++) {
             for (int r = 0; r <= n; r++) {
                 if (n == r | r == 0) cache[n][r] = 1;
-                else cache[n][r] = cache[n - 1][r - 1] + cache[n - 1][r];
+                else cache[n][r] = Math.min(cache[n - 1][r - 1] + cache[n - 1][r], 1000000001);
             }
         }
-
 
         if (cache[N+M][M] < K) out.print(-1);
         else {
@@ -40,15 +39,15 @@ class Task {
         }
     }
 
-    void findString(int N, int M, long K) {
+    void findString(int N, int M, int K) {
         if (N == 0) return;
 
-        if (cache[N][M] >= K) {
+        if (cache[N-1][M] >= K) {
             answer.append("a");
             findString(N - 1, M, K);
         } else {
             answer.append("z");
-            findString(N - 1, M - 1, K - cache[N][M]);
+            findString(N - 1, M - 1, K - cache[N-1][M]);
         }
     }
 }
