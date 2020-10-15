@@ -15,6 +15,7 @@
 * 1003(피보나치 함수) : https://www.acmicpc.net/problem/1003
 * 1010(다리 놓기) : https://www.acmicpc.net/problem/1010
 * 1167(트리의 지름) : https://www.acmicpc.net/problem/1167
+* 1967(트리의 지름) : https://www.acmicpc.net/problem/1967
 * 1238(파티) : https://www.acmicpc.net/problem/1238
 * 1256(사전) : https://www.acmicpc.net/problem/1256
 * 1339(단어수학) : https://www.acmicpc.net/problem/1339

@@ -1,7 +1,10 @@
 package org.wtcm.acmicpc.q1XXX.q1719;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.InputMismatchException;
+import java.util.PriorityQueue;
 
 public class Main_JY {
     public static void main(String[] args) {
@@ -15,8 +18,68 @@ public class Main_JY {
 }
 
 class Task {
+    int N, M;
+    ArrayList<int[]>[] map;
+    PriorityQueue<int[]> pq = new PriorityQueue<>((v1, v2) -> v1[1] - v2[1]);
     void solution(InputReader in, OutputWriter out) {
+        int[] firstLine = in.nextIntArray(2);
+        N = firstLine[0];   M = firstLine[1];
+        map = new ArrayList[N+1];
+        for (int i = 0; i <= N; i++) map[i] = new ArrayList<>();
 
+        for (int i = 0; i < M; i++) {
+            int[] input = in.nextIntArray(3);
+            map[input[0]].add(new int[] {input[1], input[2]});
+            map[input[1]].add(new int[] {input[0], input[2]});
+        }
+
+        for (int node = 1; node <= N; node++) {
+            int[] firstTouch = dijkstra(node);
+            for (int i = 1; i < firstTouch.length; i++) {
+                if (i == node) out.print("- ");
+                else out.print(firstTouch[i]+" ");
+            }
+            out.println();
+            pq.clear();
+        }
+    }
+    int[] distance, parent, path;
+    int[] dijkstra(int start) {
+        distance = new int[N+1];
+        parent = new int[N+1];
+
+        Arrays.fill(distance, 1000000001);
+        distance[start] = 0;
+        pq.add(new int[] {start, 0});
+
+        while (!pq.isEmpty()) {
+            int[] cur = pq.poll();
+
+            if (cur[1] > distance[cur[0]]) continue;
+
+            for (int[] next : map[cur[0]]) {
+                int newLength = distance[cur[0]] + next[1];
+                if (distance[next[0]] > newLength) {
+                    distance[next[0]] = newLength;
+                    pq.add(new int[] {next[0], newLength});
+                    parent[next[0]] = cur[0];
+                }
+            }
+        }
+        path = new int[N+1];
+        for (int node = 1; node <= N; node++) {
+            if (node == start) path[node] = 0;
+            else {
+                int cur = node;
+                int prev = parent[cur];
+                while (prev != start) {
+                    cur = prev;
+                    prev = parent[cur];
+                }
+                path[node] = cur;
+            }
+        }
+        return path;
     }
 }
 
