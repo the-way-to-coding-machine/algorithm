@@ -20,33 +20,67 @@ public class Main_JY {
         int[] line;
         void solution(InputReader in, OutputWriter out) {
             int[] first = in.nextIntArray(2);
-            N = first[0]; C = first[1];
+            N = first[0];
+            C = first[1];
             line = in.nextIntArray(N);
             M = in.nextInt();
 
-            for (int i = 0; i < M; i++) {
-                int[] input = in.nextIntArray(2);
-                int pretty = isPretty(input[0]-1, input[1]-1);
-                if (pretty == 0) out.print("no");
-                else out.print("yes "+pretty);
-                out.println();
-            }
+
         }
 
-        int isPretty(int start, int end) {
-            int length = (end - start + 1) >> 1;
-            HashMap<Integer, Integer> map = new HashMap<>();
+        private static class SegmentTree {
+            int[] originArr;
+            int originArrLen;
+            int[] segmentTree;
+            int segmentTreeLen;
 
-            for (int idx = start; idx <= end; idx++) {
-                if (map.containsKey(line[idx])) {
-                    map.put(line[idx], map.get(line[idx])+1);
-                } else {
-                    map.put(line[idx], 1);
+            SegmentTree(int[] arr) {
+                this.originArr = arr;
+                this.originArrLen = arr.length;
+                this.segmentTreeLen = (1<<(int)Math.ceil(Math.log10(originArrLen)/Math.log10(2)+1))+1;
+                this.segmentTree = new int[this.segmentTreeLen];
+                init(1,1,arr.length);
+            }
+
+            private int init(int current, int start, int end) {
+                if (start == end)
+                    return segmentTree[current] = originArr[start];
+
+                int mid = (start+end) >> 1;
+                return init(current*2, start, mid) + init(current*2+1, mid+1, end);
+            }
+
+            void update(int srcIdx, int targetValue) {
+                int diff = targetValue - originArr[srcIdx];
+
+                originArr[srcIdx] = targetValue;
+                update(srcIdx, diff, 1,1, originArrLen);
+            }
+
+            private void update(int changedIdx, int diff, int current, int left, int right) {
+                if (changedIdx > right || changedIdx < left) return;
+
+                segmentTree[current] += diff;
+
+                if (left != right) {
+                    int mid = (left+right) >> 1;
+                    update(changedIdx, diff, current*2, left, mid);
+                    update(changedIdx, diff, current*2+1, mid+1, right);
                 }
             }
 
-            Map.Entry<Integer, Integer> a = map.entrySet().stream().max((e1, e2) -> e1.getValue() - e2.getValue()).get();
-            return a.getValue() > length ? a.getKey() : 0;
+            int prefixSum(int start, int end) {
+                return prefixSum(1, start, end, 1, originArrLen);
+            }
+
+            private int prefixSum(int current, int start, int end, int left, int right) {
+                if (start > right || end < left) return 0;
+                else if (start <= left && right <= end) return segmentTree[current];
+
+                int mid = (left+right) >> 1;
+                return prefixSum(current*2, start, end, left, mid)
+                        + prefixSum(current*2+1, start, end, mid+1, right);
+            }
         }
     }
 }
