@@ -1,6 +1,7 @@
 package org.wtcm.nhn;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
@@ -24,6 +25,7 @@ public class Pre {
             }
         }
         System.out.println(answer.size());
+        Collections.sort(answer);
         for (Integer integer : answer) System.out.print(integer + " ");
 
     }
