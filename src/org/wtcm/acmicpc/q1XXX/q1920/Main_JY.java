@@ -9,89 +9,42 @@ public class Main_JY {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static int N, M;
     static int[] ns;
-    static int[] ans;
 
     public static void main(String[] args) throws IOException {
         N = Integer.parseInt(br.readLine());
         ns = new int[N];
         String[] s1 = br.readLine().split(" ");
-        for (int i = 0; i < N; i++) {
+        for (int i = 0; i < N; i++)
             ns[i] = Integer.parseInt(s1[i]);
-        }
 
+        Arrays.sort(ns);
         M = Integer.parseInt(br.readLine());
-        ans = new int[M];
-        BinarySearchTree binarySearchTree = new BinarySearchTree(ns);
+        StringBuilder sb = new StringBuilder();
         String[] s2 = br.readLine().split(" ");
+
         for (int i = 0; i < M; i++) {
-            if (binarySearchTree.exists(Integer.parseInt(s2[i])))
-                ans[i] = 1;
-            else ans[i] = 0;
+            sb.append(exists(Integer.parseInt(s2[i])));
+            sb.append("\n");
         }
 
-        for (int val : ans)
-            System.out.println(val);
+        System.out.print(sb.toString());
+    }
+
+    static int exists(int number) {
+        int start = 0;
+        int end = ns.length;
+        int mid = end;
+
+        while(start < end) {
+            mid = (start+end) >> 1;
+            if(ns[mid] < number) {
+                start = mid+1;
+            } else if (ns[mid] > number) {
+                end = mid;
+            } else {
+                return 1;
+            }
+        }
+        return 0;
     }
 }
-
-class BinarySearchTree {
-    int[] arr;
-
-    public BinarySearchTree(int[] arr) {
-        this.arr = arr;
-        Arrays.sort(this.arr);
-    }
-
-    public boolean exists(int number) {
-        int start = 0;
-        int end = arr.length;
-        int mid = end;
-
-        while(start < end) {
-            mid = (start+end) >> 1;
-            if(arr[mid] < number) {
-                start = mid+1;
-            } else if (arr[mid] > number) {
-                end = mid;
-            } else {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public int lowerBound(int number) {
-        int start = 0;
-        int end = arr.length;
-        int mid = end;
-
-        while(start < end) {
-            mid = (start+end) >> 1;
-
-            if(arr[mid] >= number) {
-                end = mid;
-            } else {
-                start = mid+1;
-            }
-        }
-        return end;
-    }
-
-    public int upperBound(int number) {
-        int start = 0;
-        int end = arr.length;
-        int mid = end;
-
-        while(start < end) {
-            mid = (start+end) >> 1;
-
-            if (arr[mid] <= number) {
-                start = mid+1;
-            } else {
-                end = mid;
-            }
-        }
-        return end;
-    }
-}
-
