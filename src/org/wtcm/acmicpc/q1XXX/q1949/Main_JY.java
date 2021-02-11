@@ -2,8 +2,8 @@ package org.wtcm.acmicpc.q1XXX.q1949;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.StringTokenizer;
 
 public class Main_JY {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -15,16 +15,23 @@ public class Main_JY {
 
     public static void main(String[] args) throws IOException {
         N = Integer.parseInt(br.readLine());
-        map = new List[N+1];
         visited = new boolean[N+1];
-        Arrays.fill(map, new ArrayList<>());
-        dp = new int[N+1][N+1];
+        dp = new int[N+1][2];
+        pop = new int[N+1];
+        map = new List[N+1];
+        for (int i = 1; i <= N; i++)
+            map[i] = new ArrayList<>();
 
-        pop = Arrays.stream(br.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        for (int i = 1; i <= N; i++)
+            pop[i] = Integer.parseInt(st.nextToken());
+
         for (int i = 0; i < N-1; i++) {
-            int[] input = Arrays.stream(br.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
-            map[input[0]].add(input[1]);
-            map[input[1]].add(input[0]);
+            st = new StringTokenizer(br.readLine());
+            int from = Integer.parseInt(st.nextToken());
+            int to = Integer.parseInt(st.nextToken());
+            map[from].add(to);
+            map[to].add(from);
         }
 
         visited[1] = true;
@@ -40,7 +47,7 @@ public class Main_JY {
             dp[town][0] += dp[linkedTown][1];
             dp[town][1] += Math.max(dp[linkedTown][0], dp[linkedTown][1]);
         }
-        dp[town][0] += pop[town-1];
+        dp[town][0] += pop[town];
     }
 }
 
