@@ -44,8 +44,8 @@ public class Main {
                 dp[i][i+2] =
         * */
         for (int len = 1; len < n; len++) {
-            for (int i = 1; i + len <= n; i++) {
-                int j = i + len;
+            for (int i = 1; i+len <= n; i++) {
+                int j = i+len;
                 dp[i][j] = Integer.MAX_VALUE;
 
                 for (int k = i; k < j; k++) {
