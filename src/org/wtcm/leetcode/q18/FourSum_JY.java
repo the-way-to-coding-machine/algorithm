@@ -2,6 +2,7 @@ package org.wtcm.leetcode.q18;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 
@@ -20,7 +21,8 @@ public class FourSum_JY {
             return res;
 
         if (k == 2)
-            return twoSum(nums, target, start);
+            return twoSumHash(nums, target, start);
+//            return twoSumBi(nums, target, start);
 
         for (int i = start; i < nums.length; ++i)
             if (i == start || nums[i - 1] != nums[i])
@@ -31,7 +33,7 @@ public class FourSum_JY {
         return res;
     }
 
-    public List<List<Integer>> twoSum(int[] nums, int target, int start) {
+    public List<List<Integer>> twoSumBi(int[] nums, int target, int start) {
         List<List<Integer>> res = new ArrayList<>();
         int lo = start, hi = nums.length - 1;
         while (lo < hi) {
@@ -42,6 +44,20 @@ public class FourSum_JY {
                 --hi;
             else
                 res.add(Arrays.asList(nums[lo++], nums[hi--]));
+        }
+        return res;
+    }
+
+    public List<List<Integer>> twoSumHash(int[] nums, int target, int start) {
+        HashSet<Integer> set = new HashSet<>();
+        List<List<Integer>> res = new ArrayList<>();
+
+        for (int i = start; i < nums.length; i++) {
+            if (set.contains(target-nums[i])) {
+                res.add(Arrays.asList(nums[i], target-nums[i]));
+            } else {
+                set.add(nums[i]);
+            }
         }
         return res;
     }
