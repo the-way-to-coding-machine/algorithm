@@ -1,60 +1,59 @@
 package org.wtcm.acmicpc.q1XXX.q1107;
 
 import java.io.*;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.StringTokenizer;
 
 public class Main {
     static int m;
-    static String n;
-    static HashSet<Integer> broken;
-    public static void main(String[] args) {
-        try(BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out))) {
+    static int n;
+    static boolean[] broken = new boolean[10];
 
-            n = br.readLine();
-            int numN = Integer.parseInt(n);
+    public static void main(String[] args) {
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out))) {
+
+            String input = br.readLine();
+            n = Integer.parseInt(input);
             m = Integer.parseInt(br.readLine());
 
-            StringTokenizer st = new StringTokenizer(br.readLine());
-            for (int i = 0; i < m; i++)
-                broken.add(Integer.parseInt(st.nextToken()));
-
-            int nearest, ans;
-            if (Math.abs(numN-100) <= n.length()) {
-                ans = Math.abs(numN-100);
-            } else {
-                nearest = remoteControl();
-                ans = Math.abs(nearest-numN);
+            if(m>0) { // m이 0일때 마지막줄 입력이 없는걸 생각못해서 엄청 해멨다...ㅠㅠㅠ
+                StringTokenizer st = new StringTokenizer(br.readLine());
+                for (int i = 0; i < m; i++)
+                    broken[Integer.parseInt(st.nextToken())] = true;
             }
 
-            bw.write(ans+"\n");
+            int ans = Math.abs(n - 100);
+            if (ans > input.length()) {
+                for (int i = 0; i < 1000000; i++) { // 이 1000000을 찾는것도 이 문제의 중요한 키 포인트다.
+                    int near = findNearestNumber(i);
+                    if (near != -1)
+                        ans = Math.min(ans, Math.abs(n-i)+near);
+                }
+            }
+
+            bw.write(ans + "\n");
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private static int remoteControl() {
-        StringBuilder sb = new StringBuilder();
-        for (int seq = 0; seq < n.length(); seq++) {
-            int num = n.charAt(seq) - '0';
-            if (broken.contains(num)) {
-                for (int dist = 1; dist+num < n.length(); dist++) {
-                    if (num+dist < n.length() && !broken.contains(num+dist)) {
+    private static int findNearestNumber(int num) {
+        int cnt = 0;
+        if (num == 0)
+            if (broken[num]) return -1;
+            else return 1;
 
-                    } else if (num-dist >= 0 && !broken.contains(num-dist)) {
-
-                    } else {
-
-                    }
-                }
-
+        while (num > 0) {
+            if (broken[num % 10]) {
+                return -1;
+                //뒷자리부터 부셔졌냐?
             } else {
-                sb.append(n.charAt(seq));
+                //안부셔졌으면 버튼을 누르고 자릿수를 옮긴다.
+                cnt++;
+                num /= 10;
             }
         }
-        return Integer.parseInt(sb.toString());
+        return cnt;
     }
 }
