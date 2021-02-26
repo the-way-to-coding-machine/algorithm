@@ -3,7 +3,11 @@ package org.wtcm.acmicpc.q14XXX.q14500;
 import java.io.*;
 import java.util.Arrays;
 import java.util.StringTokenizer;
-
+/* note.
+        이 문제는 그냥 넘어가기로 했다...
+        설마 했는데 19개의 모든 경우를 다 구현해줘야한다... PASS..
+*
+* */
 public class Main {
     static int n, m;
     static int[][] map;
