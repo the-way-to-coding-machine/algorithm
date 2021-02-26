@@ -1,4 +1,4 @@
-package org.wtcm.acmicpc.q1XXXX.q10159;
+package org.wtcm.acmicpc.q10XXX.q10159;
 
 import java.io.*;
 import java.util.InputMismatchException;
