@@ -11,7 +11,7 @@ public class Main {
     static String min = "999999999", max = "-999999999";
     static StringBuilder sb;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException { // todo : 다시 풀기
         br = new BufferedReader(new InputStreamReader(System.in));
         bw = new BufferedWriter(new OutputStreamWriter(System.out));
 

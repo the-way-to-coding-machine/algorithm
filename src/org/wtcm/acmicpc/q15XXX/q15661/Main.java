@@ -30,7 +30,7 @@ public class Main {
     }
 
     private static void split(int idx, int picked) {
-
+        //todo : 다시 풀기
     }
 
     private static int sum(LinkedList<Integer> team, int size) {
