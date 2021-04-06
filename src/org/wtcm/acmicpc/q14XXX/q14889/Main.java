@@ -25,8 +25,7 @@ public class Main {
         team1 = new LinkedList<>();
         team2 = new LinkedList<>();
 
-        split(0);
-
+//        split(0);
         bw.write(min+"\n");
         bw.close();
     }
