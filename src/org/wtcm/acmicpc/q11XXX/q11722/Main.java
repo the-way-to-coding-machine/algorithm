@@ -9,36 +9,20 @@ public class Main {
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
         int n = Integer.parseInt(br.readLine());
-        int[] arr = Arrays.stream(br.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+        int[] seq = Arrays.stream(br.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+        int[] dp = new int[n];
+        int max = 0;
 
-        int[] lis = new int[n+1];
-        lis[0] = Integer.MIN_VALUE;
-
-        int idx = 0;
-        for (int cur = 0; cur < n; cur++) {
-            if (lis[idx] < -arr[cur])
-                lis[++idx] = -arr[cur];
-            else {
-                int position = binarySearch(idx, -arr[cur], lis);
-                lis[position] = -arr[cur];
+        for (int start = n-1; start >= 0; start--) {
+            dp[start] = 1;
+            for (int tail = start; tail < n; tail++) {
+                if (seq[start] > seq[tail])
+                    dp[start] = Math.max(dp[start], dp[tail] + 1);
             }
+            max = Math.max(max, dp[start]);
         }
 
-        bw.write(idx+"\n");
+        bw.write(max+"\n");
         bw.close();
-    }
-
-    private static int binarySearch(int end, int target, int[] list) {
-        int mid, start = 0;
-
-        while (start < end) {
-            mid = (start + end) >> 1;
-            if (list[mid] < target) {
-                start = mid+1;
-            } else {
-                end = mid;
-            }
-        }
-        return end;
     }
 }
