@@ -5,54 +5,54 @@ import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
+    static int[] rMove = {0,1,0,-1};
+    static int[] cMove = {1,0,-1,0};
     static int n, m, k;
     static int[][] map;
-    static int[] cMove = {1, 0, -1, 0};
-    static int[] rMove = {0, 1, 0, -1};
     static boolean[][] visited;
     static int max = Integer.MIN_VALUE;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        StringTokenizer st = new StringTokenizer(br.readLine());
 
-        n = Integer.parseInt(st.nextToken());
-        m = Integer.parseInt(st.nextToken());
-        k = Integer.parseInt(st.nextToken());
-
+        int[] first = Arrays.stream(br.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+        n = first[0];
+        m = first[1];
+        k = first[2];
         map = new int[n][m];
         visited = new boolean[n][m];
-        for (int i = 0; i < n; i++)
+        for (int i = 0; i < first[0]; i++)
             map[i] = Arrays.stream(br.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
 
-        go(0,0, 0, 0);
+        go(0, 0, k, 0);
 
         bw.write(max+"\n");
         bw.close();
     }
 
-    private static void go(int sRow, int sCol, int cnt, int sum) {
-        if (cnt == k) {
-            max = Math.max(sum, max);
+    private static void go(int curRow, int curCol, int left, int sum) {
+        if (left == 0) {
+            max = Math.max(max, sum);
             return;
         }
 
-        for (int row = sRow; row < n; row++) { // 이전 행부터
-            for (int col = (row == sRow ? sCol : 0); col < m; col++) { // 이전 행의 검사시에는 처음부터 할필요가 업다.
+        for (int row = curRow; row < n; row++) {
+            for (int col = (row == curRow ? curCol : 0); col < m; col++) {
                 if (visited[row][col]) continue;
-                boolean next = true;
 
-                for (int dir = 0; dir < 4; dir++) { // 사방에 하나라도 갔던게 있으면 --> 인접한 칸.
+                boolean valid = true;
+                for (int dir = 0; dir < 4; dir++) {
                     int nRow = row+rMove[dir];
                     int nCol = col+cMove[dir];
-                    if (isIn(nRow, nCol) && visited[nRow][nCol])
-                        next = false;
+
+                    if (!isIn(nRow, nCol)) continue;
+                    if (visited[nRow][nCol]) valid = false;
                 }
 
-                if (next) {
+                if (valid) {
                     visited[row][col] = true;
-                    go(row, col, cnt+1, sum+map[row][col]);
+                    go(row, col, left-1, sum+map[row][col]);
                     visited[row][col] = false;
                 }
             }
@@ -60,6 +60,6 @@ public class Main {
     }
 
     private static boolean isIn(int row, int col) {
-        return (0 <= col && col < m) && (0 <= row && row < n);
+        return 0 <= row && row < n && 0 <= col && col < m;
     }
 }
