@@ -2,7 +2,7 @@ package org.wtcm.acmicpc.q1XXX.q1399
 
 import java.io.BufferedReader
 import java.io.InputStreamReader
-
+/*
 data class Point(val x: Int, val y: Int)
 
 val dig2 = mutableMapOf<Int, MutableList<Point>>()
@@ -75,3 +75,5 @@ fun Int.dig(): Int = if (this < 10) {
 
     ret.dig()
 }
+
+ */

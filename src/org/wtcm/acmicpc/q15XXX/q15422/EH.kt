@@ -1,5 +1,5 @@
 package org.wtcm.acmicpc.q15XXX.q15422
-
+/*
 import java.io.BufferedReader
 import java.util.*
 import kotlin.collections.ArrayList
@@ -123,3 +123,4 @@ private fun BufferedReader.readInput() {
         }
     }
 }
+ */

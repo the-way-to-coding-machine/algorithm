@@ -1,5 +1,5 @@
 package org.wtcm.leetcode.q879
-
+/*
 import kotlin.math.pow
 
 
@@ -38,3 +38,5 @@ class Solution {
         return cnt
     }
 }
+
+ */
