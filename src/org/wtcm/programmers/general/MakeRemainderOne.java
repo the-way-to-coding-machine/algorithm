@@ -8,13 +8,8 @@ import java.util.stream.IntStream;
 
 class MakeRemainderOne {
     public int solution(int n) {
-        int[] array = IntStream.rangeClosed(2, (n-1)/2).filter(s->(n-1) % s == 0).sorted().toArray();
+        int[] array = IntStream.rangeClosed(2, n).filter(s->(n-1) % s == 0).sorted().toArray();
         int answer = array[0];
         return answer;
-    }
-
-    public static void main(String[] args) {
-        MakeRemainderOne mro = new MakeRemainderOne();
-        mro.solution(14);
     }
 }
