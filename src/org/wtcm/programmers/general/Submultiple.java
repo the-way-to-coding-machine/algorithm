@@ -6,8 +6,8 @@ package org.wtcm.programmers.general;
 class Submultiple {
     public int solution(int n) {
         int answer = 0;
-        for(int i = 1; i <= n; i++) {           // 약수를 확인하는 것이기 때문에 n의 절반까지만 반복문이 돌고 구하고 return할때 n을 마저 더해주는 식으로
-            if(n % i == 0) {                    // 코드를 짰다면 훨씬 효율적이었을 것.
+        for(int i = 1; i <= n; i++) {           // n/2 ~ n 사이에는 약수가 없으므로 n의 절반까지만 반복문이 돌고 구하고 return할때
+            if(n % i == 0) {                    // n을 마저 더해주는 식으로 코드를 짰다면 훨씬 효율적이었을 것.
                 answer += i;
             }
         }
