@@ -20,9 +20,4 @@ class SumBetweenAB {
 
         return answer;
     }
-
-    public static void main(String[] args) {
-        SumBetweenAB sb = new SumBetweenAB();
-        System.out.println(sb.solution(5,5));
-    }
 }

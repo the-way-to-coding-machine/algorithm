@@ -58,11 +58,12 @@ class KakaoGift {
 
         return answer;
     }
-
+/*
     public static void main(String[] args) {
         KakaoGift kg = new KakaoGift();
         String[] friends = {"muzi", "ryan", "frodo", "neo"};
         String[] gifts = {"muzi frodo", "muzi frodo", "ryan muzi", "ryan muzi", "ryan muzi", "frodo muzi", "frodo ryan", "neo muzi"};
         System.out.println(kg.solution(friends, gifts));
     }
+ */
 }

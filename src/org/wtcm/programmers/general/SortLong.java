@@ -18,9 +18,4 @@ class SortLong {
 
         return answer;
     }
-
-    public static void main(String[] args) {
-        SortLong sl = new SortLong();
-        sl.solution(1384929);
-    }
 }

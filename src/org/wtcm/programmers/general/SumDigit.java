@@ -18,9 +18,4 @@ public class SumDigit {
 
         return answer;
     }
-
-    public static void main(String[] args) {
-        SumDigit sd = new SumDigit();
-        sd.solution(29483);
-    }
 }

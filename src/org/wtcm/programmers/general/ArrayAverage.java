@@ -10,15 +10,7 @@ import java.util.Arrays;
 class ArrayAverage {
     public double solution(int[] arr) {
         double answer = Arrays.stream(arr).sum() / (double) arr.length;         // 나누셈 결과를 소수점까지 살리고 싶으면 나누는 수를 double로 처리해주면된다.
-                                                                            // stream 메소드에는 평균 구하는 메소드가 있다. 그러므로
+        // stream 메소드에는 평균 구하는 메소드가 있다. 그러므로
         return answer;                                                      // .average.getsAsDouble로 했으면 더 좋았겠다.
-    }
-}
-
-class Main393 {
-    public static void main(String[] args) {
-        ArrayAverage aa = new ArrayAverage();
-        int[] arr = {1,2,3,4};
-        System.out.println(aa.solution(arr));
     }
 }
