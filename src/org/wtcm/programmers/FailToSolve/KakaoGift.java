@@ -1,4 +1,4 @@
-package org.wtcm.programmers.general;
+package org.wtcm.programmers.FailToSolve;
 
 // 못 푼 문제
 //https://school.programmers.co.kr/learn/courses/30/lessons/258712
